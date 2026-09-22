@@ -37,11 +37,11 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Gerar vetores temporais de saída: altitude $h(t)$, velocidade vertical $v_z(t)$, aceleração vertical $a_z(t)$.
 
 ## Fase 4 — Backend: API de Simulação
-- [ ] Criar endpoint `POST /simulate` que recebe `RocketConfig` e retorna os resultados estruturados.
-- [ ] Estruturar payload de resposta: apogeu, margem de estabilidade, velocidade(s) terminal(is), tempo de queima total, séries temporais para os gráficos.
-- [ ] Adicionar tratamento de erros para configurações fisicamente inválidas ou instáveis.
-- [ ] Escrever testes unitários para o motor de simulação (casos conhecidos/validáveis analiticamente).
-- [ ] Escrever testes de integração para o endpoint `/simulate`.
+- [x] Criar endpoint `POST /simulate` que recebe `RocketConfig` e retorna os resultados estruturados.
+- [x] Estruturar payload de resposta: apogeu, margem de estabilidade, velocidade(s) terminal(is), tempo de queima total, séries temporais para os gráficos.
+- [x] Adicionar tratamento de erros para configurações fisicamente inválidas ou instáveis.
+- [x] Escrever testes unitários para o motor de simulação (casos conhecidos/validáveis analiticamente).
+- [x] Escrever testes de integração para o endpoint `/simulate`.
 
 ## Fase 5 — Frontend: Base do Next.js
 - [ ] Inicializar projeto Next.js com TypeScript.
