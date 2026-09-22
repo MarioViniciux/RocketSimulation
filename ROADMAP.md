@@ -1,0 +1,84 @@
+# Roadmap
+
+Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de Competição do zero, conforme especificado em `AGENTS.md`. Cada fase assume que a anterior está concluída.
+
+## Fase 0 — Setup do Projeto
+- [x] Criar estrutura de diretórios raiz: `/frontend` e `/backend`.
+- [x] Atualizar `.gitignore` de forma apropriada (Python, Node, editores, build artifacts).
+- [x] Definir `README.md` com visão geral, instruções de setup e como rodar frontend/backend.
+- [x] Definir ferramentas de lint/format (ex.: `ruff`/`black` no backend, `eslint`/`prettier` no frontend).
+
+## Fase 1 — Backend: Base do FastAPI
+- [ ] Inicializar projeto Python (venv/poetry/uv) e dependências base: `fastapi`, `uvicorn`, `pydantic`.
+- [ ] Criar estrutura de módulos do backend: `/propulsion`, `/avionics`, `/payload`, `/structure`, `/recovery`, `/environment`.
+- [ ] Configurar app FastAPI inicial com rota de health-check.
+- [ ] Configurar CORS para comunicação com o frontend Next.js.
+
+## Fase 2 — Backend: Schemas Pydantic (Entrada)
+- [ ] Criar schema Pydantic para módulo Propulsão: câmara de combustão, grão propelente, bocal convergente-divergente, inércia/CM seco, parâmetros termodinâmicos/impulso.
+- [ ] Criar schema Pydantic para módulo Aviônica: massa, posição (X, Y, Z), diâmetro, comprimento.
+- [ ] Criar schema Pydantic para módulo Payload/Satélite: massa, posição (X, Y, Z), diâmetro, comprimento.
+- [ ] Criar schema Pydantic para módulo Estrutura: massa/geometria global, coifa (formato, tamanho, massa), aletas (quantidade, angulação), rail buttons (quantidade, angulação).
+- [ ] Criar schema Pydantic para módulo Recuperação: presença de drogue, massas (suporte, paraquedas, tampa), pólvora de ejeção, preditivos (velocidade terminal, tempos de ativação, raio de busca).
+- [ ] Criar schema Pydantic para módulo Ambiente: coordenadas geográficas (lat/long/elevação), velocidade do vento, comprimento do trilho.
+- [ ] Adicionar validação de limites físicos realistas em todos os schemas (valores mínimos/máximos, tipos, unidades SI).
+- [ ] Criar schema agregador `RocketConfig` que compõe todos os módulos em um único payload de entrada.
+
+## Fase 3 — Backend: Motor de Simulação Física
+- [ ] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
+- [ ] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
+- [ ] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
+- [ ] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
+- [ ] Implementar cálculo de Centro de Massa (CM) e Centro de Pressão (CP) ao longo do voo.
+- [ ] Implementar cálculo de margem de estabilidade estática (em calibres).
+- [ ] Implementar integrador das equações de movimento (3-DoF inicialmente; 6-DoF como extensão futura).
+- [ ] Implementar lógica de eventos de voo: burnout, apogeu, ativação do drogue, ativação do main, pouso.
+- [ ] Implementar cálculo de velocidade terminal sob paraquedas (drogue e/ou main).
+- [ ] Gerar vetores temporais de saída: altitude $h(t)$, velocidade vertical $v_z(t)$, aceleração vertical $a_z(t)$.
+
+## Fase 4 — Backend: API de Simulação
+- [ ] Criar endpoint `POST /simulate` que recebe `RocketConfig` e retorna os resultados estruturados.
+- [ ] Estruturar payload de resposta: apogeu, margem de estabilidade, velocidade(s) terminal(is), tempo de queima total, séries temporais para os gráficos.
+- [ ] Adicionar tratamento de erros para configurações fisicamente inválidas ou instáveis.
+- [ ] Escrever testes unitários para o motor de simulação (casos conhecidos/validáveis analiticamente).
+- [ ] Escrever testes de integração para o endpoint `/simulate`.
+
+## Fase 5 — Frontend: Base do Next.js
+- [ ] Inicializar projeto Next.js com TypeScript.
+- [ ] Configurar cliente HTTP para consumir a API do backend.
+- [ ] Definir estrutura de rotas/páginas: entrada de dados, visualizador, dashboard de resultados.
+- [ ] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
+
+## Fase 6 — Frontend: Formulários de Entrada por Subsistema
+- [ ] Criar formulário do subsistema Propulsão.
+- [ ] Criar formulário do subsistema Aviônica.
+- [ ] Criar formulário do subsistema Payload.
+- [ ] Criar formulário do subsistema Estrutura.
+- [ ] Criar formulário do subsistema Recuperação.
+- [ ] Criar formulário do subsistema Ambiente/Localização.
+- [ ] Implementar validação client-side consistente com os limites definidos no backend.
+- [ ] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
+
+## Fase 7 — Frontend: Visualizador Interativo 2D/3D
+- [ ] Configurar Three.js/WebGL no Next.js.
+- [ ] Implementar renderização 3D do foguete a partir das dimensões/diâmetros/posições informadas.
+- [ ] Implementar renderização 2D equivalente como fallback leve e fluido.
+- [ ] Implementar alternância de visualização entre modos 2D e 3D.
+- [ ] Implementar detecção de suporte a WebGL com fallback automático para 2D.
+
+## Fase 8 — Frontend: Dashboard de Resultados
+- [ ] Implementar exibição dos KPIs (apogeu, estabilidade, velocidade terminal, tempo de queima).
+- [ ] Implementar gráfico de altitude ao longo do tempo.
+- [ ] Implementar gráficos de aceleração e velocidade vertical ao longo do tempo.
+- [ ] Implementar estados de carregamento/erro durante a chamada à API de simulação.
+
+## Fase 9 — Integração e Fluxo Completo
+- [ ] Conectar fluxo completo: preenchimento dos formulários → chamada `/simulate` → visualizador atualizado → dashboard populado.
+- [ ] Validar consistência de unidades SI em toda a comunicação frontend-backend.
+- [ ] Testes end-to-end do fluxo principal (entrada → simulação → resultados).
+
+## Fase 10 — Polimento e Entrega
+- [ ] Revisar UX dos formulários (agrupamento por subsistema, mensagens de validação claras).
+- [ ] Revisar performance da renderização 3D em dispositivos modestos.
+- [ ] Documentar a API (OpenAPI/Swagger já gerado pelo FastAPI) e revisar README com instruções finais.
+- [ ] Preparar scripts/documentação de deploy (backend e frontend).
