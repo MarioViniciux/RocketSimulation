@@ -40,7 +40,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar endpoint `POST /simulate` que recebe `RocketConfig` e retorna os resultados estruturados.
 - [x] Estruturar payload de resposta: apogeu, margem de estabilidade, velocidade(s) terminal(is), tempo de queima total, séries temporais para os gráficos.
 - [x] Adicionar tratamento de erros para configurações fisicamente inválidas ou instáveis.
-- [ ] Escrever testes unitários para o motor de simulação (casos conhecidos/validáveis analiticamente).
+- [x] Escrever testes unitários para o motor de simulação (casos conhecidos/validáveis analiticamente).
 - [ ] Escrever testes de integração para o endpoint `/simulate`.
 
 ## Fase 5 — Frontend: Base do Next.js
