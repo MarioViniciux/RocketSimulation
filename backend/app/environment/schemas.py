@@ -15,3 +15,12 @@ class Environment(BaseModel):
     launch_rail_length_m: float = Field(
         ..., gt=0, le=10.0, description="Comprimento do trilho de lançamento (m)."
     )
+    launch_rail_angle_deg: float = Field(
+        ...,
+        ge=-45.0,
+        le=45.0,
+        description=(
+            "Inclinação do trilho de lançamento em relação à vertical (graus). "
+            "0° = trilho vertical; sinal positivo inclina o trilho no sentido +X."
+        ),
+    )

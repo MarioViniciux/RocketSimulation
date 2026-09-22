@@ -71,7 +71,7 @@ O motor de simulação deve modularizar os parâmetros de entrada nos seguintes 
 
 ## 6. Localização e Tempo (/environment)
 - Coordenadas Geográficas: Latitude, longitude e elevação em relação ao nível do mar.
-- Atmosfera e Trilha: Velocidade do vento prevista e comprimento do trilho de lançamento.
+- Atmosfera e Trilha: Velocidade do vento prevista, comprimento do trilho de lançamento e inclinação do trilho em relação à vertical.
 
 # Saídas e Resultados da Simulação
 Após o processamento das leis da física aplicáveis (dinâmica de fluidos, aerodinâmica compressível/subsônica, gravitação e equações de movimento), o back-end deve retornar:

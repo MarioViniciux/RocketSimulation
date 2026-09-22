@@ -7,9 +7,11 @@ atitude, a orientação do foguete (necessária para a direção do empuxo) é
 aproximada em duas fases:
 
 1. Fase de trilho: enquanto o deslocamento ao longo do trilho é menor que
-   `launch_rail_length_m`, o foguete é mecanicamente restrito a apontar na
-   vertical. `Environment` não define um ângulo de trilho, então assume-se
-   lançamento vertical.
+   `launch_rail_length_m`, o foguete é mecanicamente restrito ao eixo do
+   trilho, cuja direção é dada por `launch_rail_angle_deg` (inclinação em
+   relação à vertical). Apenas a componente das forças paralela ao trilho
+   é considerada nessa fase — a componente perpendicular é cancelada pela
+   reação normal do trilho, como em um lançador real.
 2. Voo livre: assume-se ângulo de ataque nulo (foguete estaticamente
    estável "cata-vento", alinhado com a velocidade relativa ao ar).
 
@@ -58,6 +60,10 @@ def _unit(a: Vector3) -> Vector3:
     return _scale(a, 1.0 / magnitude)
 
 
+def _dot(a: Vector3, b: Vector3) -> float:
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+
+
 @dataclass(frozen=True)
 class FlightState:
     """Estado translacional do foguete em um instante de voo.
@@ -85,35 +91,50 @@ class TranslationalDynamicsModel:
     atmosphere_model: AtmosphereModel
     drag_model: DragModel
     launch_rail_length_m: float
+    launch_rail_angle_deg: float
     wind_speed_m_s: float
 
     @classmethod
     def from_rocket_config(cls, config: RocketConfig) -> "TranslationalDynamicsModel":
         mass_model = VariableMassModel.from_rocket_config(config)
+        environment = config.environment
         return cls(
             mass_model=mass_model,
             thrust_model=ThrustModel.from_rocket_config(config, mass_model),
             atmosphere_model=AtmosphereModel.from_rocket_config(config),
             drag_model=DragModel.from_rocket_config(config),
-            launch_rail_length_m=config.environment.launch_rail_length_m,
-            wind_speed_m_s=config.environment.wind_speed_m_s,
+            launch_rail_length_m=environment.launch_rail_length_m,
+            launch_rail_angle_deg=environment.launch_rail_angle_deg,
+            wind_speed_m_s=environment.wind_speed_m_s,
         )
 
     def _wind_velocity_m_s(self) -> Vector3:
         return (self.wind_speed_m_s, 0.0, 0.0)
+
+    def _rail_direction(self) -> Vector3:
+        """Vetor unitário ao longo do trilho de lançamento.
+
+        `launch_rail_angle_deg` é medido a partir da vertical (0° = trilho
+        vertical); um ângulo positivo inclina o trilho no sentido +X.
+        """
+        angle_rad = math.radians(self.launch_rail_angle_deg)
+        return (math.sin(angle_rad), 0.0, math.cos(angle_rad))
 
     def acceleration_m_s2(self, t_s: float, position_m: Vector3, velocity_m_s: Vector3) -> Vector3:
         """Aceleração (m/s²) resultante de empuxo, arrasto e peso no instante `t_s`."""
         mass_kg = self.mass_model.total_mass_at(t_s)
         altitude_agl_m = position_m[2]
 
+        rail_direction = self._rail_direction()
+        along_rail_distance_m = _dot(position_m, rail_direction)
+        on_launch_rail = along_rail_distance_m < self.launch_rail_length_m
+
         relative_velocity_m_s = _sub(velocity_m_s, self._wind_velocity_m_s())
         relative_speed_m_s = _norm(relative_velocity_m_s)
         relative_velocity_unit = _unit(relative_velocity_m_s)
 
-        on_launch_rail = altitude_agl_m < self.launch_rail_length_m
         if on_launch_rail or relative_speed_m_s == 0.0:
-            thrust_direction = (0.0, 0.0, 1.0)
+            thrust_direction = rail_direction
         else:
             thrust_direction = relative_velocity_unit
         thrust_force_n = _scale(thrust_direction, self.thrust_model.thrust_at(t_s))
@@ -129,6 +150,9 @@ class TranslationalDynamicsModel:
         weight_force_n: Vector3 = (0.0, 0.0, -mass_kg * gravity_m_s2)
 
         total_force_n = _add(_add(thrust_force_n, drag_force_n), weight_force_n)
+        if on_launch_rail:
+            along_rail_force_n = _dot(total_force_n, rail_direction)
+            total_force_n = _scale(rail_direction, along_rail_force_n)
         return _scale(total_force_n, 1.0 / mass_kg)
 
     def _derivative(
