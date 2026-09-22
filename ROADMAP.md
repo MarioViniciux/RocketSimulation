@@ -28,7 +28,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
 - [x] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
 - [x] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
-- [ ] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
+- [x] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
 - [ ] Implementar cálculo de Centro de Massa (CM) e Centro de Pressão (CP) ao longo do voo.
 - [ ] Implementar cálculo de margem de estabilidade estática (em calibres).
 - [ ] Implementar integrador das equações de movimento (3-DoF inicialmente; 6-DoF como extensão futura).

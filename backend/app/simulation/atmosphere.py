@@ -8,6 +8,7 @@ from app.schemas import RocketConfig
 
 _STANDARD_GRAVITY_M_S2 = 9.80665
 _SPECIFIC_GAS_CONSTANT_AIR_J_KG_K = 287.05287
+_ADIABATIC_INDEX_AIR = 1.4
 _EARTH_MEAN_RADIUS_M = 6_371_000.0
 
 # Atmosfera Padrão Internacional (ISA/ICAO): camadas definidas por
@@ -90,6 +91,11 @@ class AtmosphereModel:
         pressure_pa = self.pressure_pa(altitude_agl_m)
         temperature_k = self.temperature_k(altitude_agl_m)
         return pressure_pa / (_SPECIFIC_GAS_CONSTANT_AIR_J_KG_K * temperature_k)
+
+    def speed_of_sound_m_s(self, altitude_agl_m: float) -> float:
+        """Velocidade do som no ar (m/s) na altitude AGL informada, `a = sqrt(gamma * R * T)`."""
+        temperature_k = self.temperature_k(altitude_agl_m)
+        return math.sqrt(_ADIABATIC_INDEX_AIR * _SPECIFIC_GAS_CONSTANT_AIR_J_KG_K * temperature_k)
 
     def gravity_m_s2(self, altitude_agl_m: float) -> float:
         """Gravidade local (m/s²) na altitude AGL informada, para a latitude do local."""
