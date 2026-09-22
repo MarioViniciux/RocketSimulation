@@ -9,20 +9,20 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Definir ferramentas de lint/format (ex.: `ruff`/`black` no backend, `eslint`/`prettier` no frontend).
 
 ## Fase 1 — Backend: Base do FastAPI
-- [ ] Inicializar projeto Python (venv/poetry/uv) e dependências base: `fastapi`, `uvicorn`, `pydantic`.
-- [ ] Criar estrutura de módulos do backend: `/propulsion`, `/avionics`, `/payload`, `/structure`, `/recovery`, `/environment`.
-- [ ] Configurar app FastAPI inicial com rota de health-check.
-- [ ] Configurar CORS para comunicação com o frontend Next.js.
+- [x] Inicializar projeto Python (venv/poetry/uv) e dependências base: `fastapi`, `uvicorn`, `pydantic`.
+- [x] Criar estrutura de módulos do backend: `/propulsion`, `/avionics`, `/payload`, `/structure`, `/recovery`, `/environment`.
+- [x] Configurar app FastAPI inicial com rota de health-check.
+- [x] Configurar CORS para comunicação com o frontend Next.js.
 
 ## Fase 2 — Backend: Schemas Pydantic (Entrada)
-- [ ] Criar schema Pydantic para módulo Propulsão: câmara de combustão, grão propelente, bocal convergente-divergente, inércia/CM seco, parâmetros termodinâmicos/impulso.
-- [ ] Criar schema Pydantic para módulo Aviônica: massa, posição (X, Y, Z), diâmetro, comprimento.
-- [ ] Criar schema Pydantic para módulo Payload/Satélite: massa, posição (X, Y, Z), diâmetro, comprimento.
-- [ ] Criar schema Pydantic para módulo Estrutura: massa/geometria global, coifa (formato, tamanho, massa), aletas (quantidade, angulação), rail buttons (quantidade, angulação).
-- [ ] Criar schema Pydantic para módulo Recuperação: presença de drogue, massas (suporte, paraquedas, tampa), pólvora de ejeção, preditivos (velocidade terminal, tempos de ativação, raio de busca).
-- [ ] Criar schema Pydantic para módulo Ambiente: coordenadas geográficas (lat/long/elevação), velocidade do vento, comprimento do trilho.
-- [ ] Adicionar validação de limites físicos realistas em todos os schemas (valores mínimos/máximos, tipos, unidades SI).
-- [ ] Criar schema agregador `RocketConfig` que compõe todos os módulos em um único payload de entrada.
+- [x] Criar schema Pydantic para módulo Propulsão: câmara de combustão, grão propelente, bocal convergente-divergente, inércia/CM seco, parâmetros termodinâmicos/impulso.
+- [x] Criar schema Pydantic para módulo Aviônica: massa, posição (X, Y, Z), diâmetro, comprimento.
+- [x] Criar schema Pydantic para módulo Payload/Satélite: massa, posição (X, Y, Z), diâmetro, comprimento.
+- [x] Criar schema Pydantic para módulo Estrutura: massa/geometria global, coifa (formato, tamanho, massa), aletas (quantidade, angulação), rail buttons (quantidade, angulação).
+- [x] Criar schema Pydantic para módulo Recuperação: presença de drogue, massas (suporte, paraquedas, tampa), pólvora de ejeção, preditivos (velocidade terminal, tempos de ativação, raio de busca).
+- [x] Criar schema Pydantic para módulo Ambiente: coordenadas geográficas (lat/long/elevação), velocidade do vento, comprimento do trilho.
+- [x] Adicionar validação de limites físicos realistas em todos os schemas (valores mínimos/máximos, tipos, unidades SI).
+- [x] Criar schema agregador `RocketConfig` que compõe todos os módulos em um único payload de entrada.
 
 ## Fase 3 — Backend: Motor de Simulação Física
 - [ ] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
