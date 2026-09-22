@@ -57,14 +57,15 @@ O motor de simulação deve modularizar os parâmetros de entrada nos seguintes 
 - Posição ($X, Y, Z$), diâmetro e comprimento/tamanho.
 
 ## 4. Estrutura (/structure)
-- Massa e Geometria Global: Massa da estrutura totalmente vazia (incluindo coifa), comprimento total do foguete (com coifa) e diâmetro do corpo (fuselagem).
+- Massa e Geometria Global: Massa da estrutura totalmente vazia (incluindo coifa), comprimento total do foguete (com coifa), diâmetro do corpo (fuselagem) e posição do centro de massa da estrutura ao longo do eixo do foguete.
+- Aerodinâmica: Coeficiente de arrasto (Cd) de referência em baixo Número de Mach, usado como base para a correção de compressibilidade em função do Número de Mach.
 - Coifa (Nose Cone): Formato (ex.: ogival, parabólico, cônico), tamanho/comprimento e massa da coifa.
 - Aletas (Fins): Quantidade de aletas, angulação de montagem e geometria de planta (corda de raiz, corda de ponta, envergadura/semi-span, enflechamento e posição do bordo de ataque da raiz a partir da ponta do nariz) — necessária para o cálculo do Centro de Pressão pelo método de Barrowman.
 - Guias de Lançamento (Rail Buttons): Quantidade e angulação dos rail buttons.
 
 ## 5. Recuperação (/recovery)
 - Paraquedas: Presença ou ausência de paraquedas Drogue (piloto).
-- Massas: Massa do suporte inferior, massa dos paraquedas (se houver drogue, somar a massa do drogue com a do main) e massa da tampa do pistão.
+- Massas: Massa do suporte inferior, massa dos paraquedas (se houver drogue, somar a massa do drogue com a do main), massa da tampa do pistão e posição do centro de massa do conjunto de recuperação ao longo do eixo do foguete.
 - Ejeção: Quantidade de pólvora (em gramas).
 - Preditivos de Voo: Velocidade terminal prevista, tempo de ativação do paraquedas após o apogeu (caso haja drogue, considerar 2 instantes distintos: um para o drogue e outro para o main) e raio de busca previsto (em metros).
 

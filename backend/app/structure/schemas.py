@@ -73,6 +73,21 @@ class Structure(BaseModel):
     body_diameter_m: float = Field(
         ..., gt=0, le=0.5, description="Diâmetro do corpo (fuselagem) do foguete (m)."
     )
+    center_of_mass_m: float = Field(
+        ...,
+        ge=-10.0,
+        le=10.0,
+        description="Posição do centro de massa da estrutura ao longo do eixo do foguete (m).",
+    )
+    drag_coefficient: float = Field(
+        ...,
+        gt=0,
+        le=2.0,
+        description=(
+            "Coeficiente de arrasto (Cd) de referência em baixo Número de Mach "
+            "(escoamento subsônico incompressível)."
+        ),
+    )
     nose_cone: NoseCone
     fins: Fins
     rail_buttons: RailButtons

@@ -3,6 +3,8 @@
 import math
 from dataclasses import dataclass
 
+from app.schemas import RocketConfig
+
 
 def mach_number(velocity_m_s: float, speed_of_sound_m_s: float) -> float:
     """Número de Mach a partir da velocidade do foguete e da velocidade do som local."""
@@ -40,6 +42,16 @@ class DragModel:
 
     reference_area_m2: float
     subsonic_drag_coefficient: float
+
+    @classmethod
+    def from_rocket_config(cls, config: RocketConfig) -> "DragModel":
+        structure = config.structure
+        reference_radius_m = structure.body_diameter_m / 2.0
+        reference_area_m2 = math.pi * reference_radius_m**2
+        return cls(
+            reference_area_m2=reference_area_m2,
+            subsonic_drag_coefficient=structure.drag_coefficient,
+        )
 
     def drag_coefficient(self, mach: float) -> float:
         """Coeficiente de arrasto `Cd(M)`, corrigido pela compressibilidade."""

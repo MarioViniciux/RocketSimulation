@@ -48,21 +48,8 @@ class CenterOfMassModel:
 
     @classmethod
     def from_rocket_config(
-        cls,
-        config: RocketConfig,
-        *,
-        structure_position_m: float,
-        recovery_position_m: float,
-        mass_model: VariableMassModel | None = None,
+        cls, config: RocketConfig, mass_model: VariableMassModel | None = None
     ) -> "CenterOfMassModel":
-        """Constrói o modelo a partir do `RocketConfig`.
-
-        `structure_position_m` e `recovery_position_m` são exigidos porque os
-        módulos de Estrutura e Recuperação, hoje, expõem apenas massas totais
-        (`empty_mass_kg`, `lower_support_mass_kg`, etc.), sem uma posição
-        associada ao longo do foguete — diferente de Aviônica e Payload, que
-        já trazem `position_x_m`.
-        """
         mass_model = mass_model or VariableMassModel.from_rocket_config(config)
         propulsion = config.propulsion
         recovery = config.recovery
@@ -77,8 +64,8 @@ class CenterOfMassModel:
             PointMass(config.avionics.mass_kg, config.avionics.position_x_m),
             PointMass(config.payload.mass_kg, config.payload.position_x_m),
             PointMass(propulsion.combustion_chamber.empty_mass_kg, dry_motor_position_m),
-            PointMass(config.structure.empty_mass_kg, structure_position_m),
-            PointMass(recovery_mass_kg, recovery_position_m),
+            PointMass(config.structure.empty_mass_kg, config.structure.center_of_mass_m),
+            PointMass(recovery_mass_kg, recovery.center_of_mass_m),
         )
         return cls(
             mass_model=mass_model,

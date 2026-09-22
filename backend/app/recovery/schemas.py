@@ -22,6 +22,15 @@ class Recovery(BaseModel):
     ejection_charge_mass_kg: float = Field(
         ..., gt=0, le=0.1, description="Massa de pólvora de ejeção (kg)."
     )
+    center_of_mass_m: float = Field(
+        ...,
+        ge=-10.0,
+        le=10.0,
+        description=(
+            "Posição do centro de massa do conjunto de recuperação "
+            "ao longo do eixo do foguete (m)."
+        ),
+    )
     predicted_terminal_velocity_m_s: float = Field(
         ..., gt=0, le=50.0, description="Velocidade terminal prevista (m/s)."
     )
