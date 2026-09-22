@@ -22,7 +22,7 @@ intensidade do vento, não uma direção, então essa é a convenção adotada.
 
 Este módulo apenas integra as equações de movimento passo a passo; a
 lógica de eventos de voo (burnout, apogeu, acionamento de paraquedas,
-pouso) fica para o próximo item do roadmap.
+pouso) está em `app.simulation.flight_events`.
 """
 
 import math
