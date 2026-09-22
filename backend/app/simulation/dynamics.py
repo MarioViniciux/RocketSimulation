@@ -120,8 +120,20 @@ class TranslationalDynamicsModel:
         angle_rad = math.radians(self.launch_rail_angle_deg)
         return (math.sin(angle_rad), 0.0, math.cos(angle_rad))
 
-    def acceleration_m_s2(self, t_s: float, position_m: Vector3, velocity_m_s: Vector3) -> Vector3:
-        """Aceleração (m/s²) resultante de empuxo, arrasto e peso no instante `t_s`."""
+    def acceleration_m_s2(
+        self,
+        t_s: float,
+        position_m: Vector3,
+        velocity_m_s: Vector3,
+        drag_model: DragModel | None = None,
+    ) -> Vector3:
+        """Aceleração (m/s²) resultante de empuxo, arrasto e peso no instante `t_s`.
+
+        `drag_model` permite substituir o arrasto do corpo do foguete (usado
+        por padrão) pelo arrasto de um paraquedas já ativado — ver
+        `app.simulation.flight_events`.
+        """
+        drag_model = drag_model or self.drag_model
         mass_kg = self.mass_model.total_mass_at(t_s)
         altitude_agl_m = position_m[2]
 
@@ -141,7 +153,7 @@ class TranslationalDynamicsModel:
 
         air_density_kg_m3 = self.atmosphere_model.density_kg_m3(altitude_agl_m)
         speed_of_sound_m_s = self.atmosphere_model.speed_of_sound_m_s(altitude_agl_m)
-        drag_magnitude_n = self.drag_model.drag_force_n(
+        drag_magnitude_n = drag_model.drag_force_n(
             relative_speed_m_s, air_density_kg_m3, speed_of_sound_m_s
         )
         drag_force_n = _scale(relative_velocity_unit, drag_magnitude_n)
@@ -156,28 +168,39 @@ class TranslationalDynamicsModel:
         return _scale(total_force_n, 1.0 / mass_kg)
 
     def _derivative(
-        self, t_s: float, position_m: Vector3, velocity_m_s: Vector3
+        self,
+        t_s: float,
+        position_m: Vector3,
+        velocity_m_s: Vector3,
+        drag_model: DragModel | None = None,
     ) -> tuple[Vector3, Vector3]:
-        return velocity_m_s, self.acceleration_m_s2(t_s, position_m, velocity_m_s)
+        return velocity_m_s, self.acceleration_m_s2(t_s, position_m, velocity_m_s, drag_model)
 
-    def step_rk4(self, state: FlightState, dt_s: float) -> FlightState:
+    def step_rk4(
+        self, state: FlightState, dt_s: float, drag_model: DragModel | None = None
+    ) -> FlightState:
         """Avança o estado em `dt_s` segundos, via Runge-Kutta de 4ª ordem."""
         t0_s, p0_m, v0_m_s = state.t_s, state.position_m, state.velocity_m_s
         half_dt_s = dt_s / 2.0
 
-        k1_v, k1_a = self._derivative(t0_s, p0_m, v0_m_s)
+        k1_v, k1_a = self._derivative(t0_s, p0_m, v0_m_s, drag_model)
         k2_v, k2_a = self._derivative(
             t0_s + half_dt_s,
             _add(p0_m, _scale(k1_v, half_dt_s)),
             _add(v0_m_s, _scale(k1_a, half_dt_s)),
+            drag_model,
         )
         k3_v, k3_a = self._derivative(
             t0_s + half_dt_s,
             _add(p0_m, _scale(k2_v, half_dt_s)),
             _add(v0_m_s, _scale(k2_a, half_dt_s)),
+            drag_model,
         )
         k4_v, k4_a = self._derivative(
-            t0_s + dt_s, _add(p0_m, _scale(k3_v, dt_s)), _add(v0_m_s, _scale(k3_a, dt_s))
+            t0_s + dt_s,
+            _add(p0_m, _scale(k3_v, dt_s)),
+            _add(v0_m_s, _scale(k3_a, dt_s)),
+            drag_model,
         )
 
         position_m = _add(
@@ -195,12 +218,16 @@ class TranslationalDynamicsModel:
         return FlightState(t_s=t0_s + dt_s, position_m=position_m, velocity_m_s=velocity_m_s)
 
     def integrate(
-        self, initial_state: FlightState, dt_s: float, num_steps: int
+        self,
+        initial_state: FlightState,
+        dt_s: float,
+        num_steps: int,
+        drag_model: DragModel | None = None,
     ) -> list[FlightState]:
         """Integra `num_steps` passos de tamanho `dt_s`, a partir de `initial_state`."""
         states = [initial_state]
         state = initial_state
         for _ in range(num_steps):
-            state = self.step_rk4(state, dt_s)
+            state = self.step_rk4(state, dt_s, drag_model)
             states.append(state)
         return states

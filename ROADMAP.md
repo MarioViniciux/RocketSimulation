@@ -33,7 +33,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Implementar cálculo de margem de estabilidade estática (em calibres).
 - [x] Implementar integrador das equações de movimento (3-DoF inicialmente; 6-DoF como extensão futura).
 - [x] Implementar lógica de eventos de voo: burnout, apogeu, ativação do drogue, ativação do main, pouso.
-- [ ] Implementar cálculo de velocidade terminal sob paraquedas (drogue e/ou main).
+- [x] Implementar cálculo de velocidade terminal sob paraquedas (drogue e/ou main).
 - [ ] Gerar vetores temporais de saída: altitude $h(t)$, velocidade vertical $v_z(t)$, aceleração vertical $a_z(t)$.
 
 ## Fase 4 — Backend: API de Simulação

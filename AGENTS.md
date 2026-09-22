@@ -66,6 +66,7 @@ O motor de simulação deve modularizar os parâmetros de entrada nos seguintes 
 ## 5. Recuperação (/recovery)
 - Paraquedas: Presença ou ausência de paraquedas Drogue (piloto).
 - Massas: Massa do suporte inferior, massa dos paraquedas (se houver drogue, somar a massa do drogue com a do main), massa da tampa do pistão e posição do centro de massa do conjunto de recuperação ao longo do eixo do foguete.
+- Aerodinâmica dos Paraquedas: Coeficiente de arrasto (Cd) e diâmetro do paraquedas main; coeficiente de arrasto e diâmetro do drogue (se houver) — usados para calcular a velocidade terminal sob cada paraquedas.
 - Ejeção: Quantidade de pólvora (em gramas).
 - Preditivos de Voo: Velocidade terminal prevista, tempo de ativação do paraquedas após o apogeu (caso haja drogue, considerar 2 instantes distintos: um para o drogue e outro para o main) e raio de busca previsto (em metros).
 

@@ -8,17 +8,19 @@ uma primeira implementação com passo de integração pequeno.
 
 A ativação do drogue e do main é agendada a partir do instante do apogeu,
 somando `drogue_deployment_time_s`/`main_deployment_time_s` (ver
-`app/recovery/schemas.py`). Este módulo apenas detecta e registra os
-eventos; a mudança de comportamento aerodinâmico sob paraquedas (arrasto e
-velocidade terminal) é o próximo item do roadmap — até lá, a integração
-segue usando o arrasto do corpo do foguete mesmo após a ativação dos
-paraquedas.
+`app/recovery/schemas.py`). A partir de cada ativação, a integração passa a
+usar o arrasto do paraquedas correspondente (coeficiente de arrasto e área
+do paraquedas circular) no lugar do arrasto do corpo do foguete — ver
+`app.simulation.terminal_velocity` para o cálculo analítico da velocidade
+terminal sob cada paraquedas.
 """
 
+import math
 from dataclasses import dataclass
 from enum import StrEnum
 
 from app.schemas import RocketConfig
+from app.simulation.drag import DragModel
 from app.simulation.dynamics import FlightState, TranslationalDynamicsModel, Vector3
 
 
@@ -78,6 +80,11 @@ def _linear_root_t_s(t0_s: float, f0: float, t1_s: float, f1: float) -> float:
     return t0_s + (0.0 - f0) * (t1_s - t0_s) / (f1 - f0)
 
 
+def _canopy_drag_model(drag_coefficient: float, diameter_m: float) -> DragModel:
+    canopy_area_m2 = math.pi * (diameter_m / 2.0) ** 2
+    return DragModel(reference_area_m2=canopy_area_m2, subsonic_drag_coefficient=drag_coefficient)
+
+
 @dataclass(frozen=True)
 class FlightEventSimulator:
     """Simula o voo completo, detectando os eventos ao longo da integração."""
@@ -87,6 +94,8 @@ class FlightEventSimulator:
     has_drogue: bool
     drogue_deployment_time_s: float | None
     main_deployment_time_s: float
+    drogue_drag_model: DragModel | None
+    main_drag_model: DragModel
 
     @classmethod
     def from_rocket_config(
@@ -96,12 +105,23 @@ class FlightEventSimulator:
     ) -> "FlightEventSimulator":
         dynamics_model = dynamics_model or TranslationalDynamicsModel.from_rocket_config(config)
         recovery = config.recovery
+        drogue_drag_model = None
+        if recovery.has_drogue:
+            assert recovery.drogue_drag_coefficient is not None
+            assert recovery.drogue_diameter_m is not None
+            drogue_drag_model = _canopy_drag_model(
+                recovery.drogue_drag_coefficient, recovery.drogue_diameter_m
+            )
         return cls(
             dynamics_model=dynamics_model,
             burn_time_s=dynamics_model.mass_model.burn_time_s,
             has_drogue=recovery.has_drogue,
             drogue_deployment_time_s=recovery.drogue_deployment_time_s,
             main_deployment_time_s=recovery.main_deployment_time_s,
+            drogue_drag_model=drogue_drag_model,
+            main_drag_model=_canopy_drag_model(
+                recovery.main_drag_coefficient, recovery.main_diameter_m
+            ),
         )
 
     def simulate(self, dt_s: float, max_time_s: float) -> FlightTimeline:
@@ -115,10 +135,11 @@ class FlightEventSimulator:
         main_done = False
         drogue_deploy_time_s: float | None = None
         main_deploy_time_s: float | None = None
+        active_drag_model = self.dynamics_model.drag_model
 
         state = states[0]
         while state.t_s < max_time_s:
-            next_state = self.dynamics_model.step_rk4(state, dt_s)
+            next_state = self.dynamics_model.step_rk4(state, dt_s, active_drag_model)
 
             if not burnout_done and state.t_s < self.burn_time_s <= next_state.t_s:
                 burnout_state = _interpolate_state(state, next_state, self.burn_time_s)
@@ -144,6 +165,8 @@ class FlightEventSimulator:
                 drogue_state = _interpolate_state(state, next_state, drogue_deploy_time_s)
                 events.append(FlightEvent(FlightEventType.DROGUE_DEPLOYMENT, drogue_state))
                 drogue_done = True
+                assert self.drogue_drag_model is not None
+                active_drag_model = self.drogue_drag_model
 
             if (
                 not main_done
@@ -153,6 +176,7 @@ class FlightEventSimulator:
                 main_state = _interpolate_state(state, next_state, main_deploy_time_s)
                 events.append(FlightEvent(FlightEventType.MAIN_DEPLOYMENT, main_state))
                 main_done = True
+                active_drag_model = self.main_drag_model
 
             if apogee_done and state.position_m[2] > 0.0 >= next_state.position_m[2]:
                 landing_time_s = _linear_root_t_s(
