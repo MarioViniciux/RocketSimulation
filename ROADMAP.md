@@ -26,7 +26,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 
 ## Fase 3 — Backend: Motor de Simulação Física
 - [x] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
-- [ ] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
+- [x] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
 - [ ] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
 - [ ] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
 - [ ] Implementar cálculo de Centro de Massa (CM) e Centro de Pressão (CP) ao longo do voo.
