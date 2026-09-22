@@ -25,7 +25,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar schema agregador `RocketConfig` que compõe todos os módulos em um único payload de entrada.
 
 ## Fase 3 — Backend: Motor de Simulação Física
-- [ ] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
+- [x] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
 - [ ] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
 - [ ] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
 - [ ] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
