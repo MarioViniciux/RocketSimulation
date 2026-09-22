@@ -57,9 +57,9 @@ O motor de simulação deve modularizar os parâmetros de entrada nos seguintes 
 - Posição ($X, Y, Z$), diâmetro e comprimento/tamanho.
 
 ## 4. Estrutura (/structure)
-- Massa e Geometria Global: Massa da estrutura totalmente vazia (incluindo coifa) e comprimento total do foguete (com coifa).
+- Massa e Geometria Global: Massa da estrutura totalmente vazia (incluindo coifa), comprimento total do foguete (com coifa) e diâmetro do corpo (fuselagem).
 - Coifa (Nose Cone): Formato (ex.: ogival, parabólico, cônico), tamanho/comprimento e massa da coifa.
-- Aletas (Fins): Quantidade de aletas e angulação de montagem.
+- Aletas (Fins): Quantidade de aletas, angulação de montagem e geometria de planta (corda de raiz, corda de ponta, envergadura/semi-span, enflechamento e posição do bordo de ataque da raiz a partir da ponta do nariz) — necessária para o cálculo do Centro de Pressão pelo método de Barrowman.
 - Guias de Lançamento (Rail Buttons): Quantidade e angulação dos rail buttons.
 
 ## 5. Recuperação (/recovery)

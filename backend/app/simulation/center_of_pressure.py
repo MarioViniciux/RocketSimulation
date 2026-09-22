@@ -9,17 +9,12 @@ compressibilidade (deslocamento do CP com o Número de Mach) e a
 contribuição do corpo cilíndrico/coifa em ângulo de ataque não são
 modelados nesta primeira versão.
 
-Nota sobre o schema atual: `Structure.Fins` (ver `app/structure/schemas.py`)
-hoje só armazena a quantidade de aletas e o ângulo de montagem (cant), sem
-geometria de planta (corda de raiz/ponta, envergadura, enflechamento) nem o
-diâmetro do corpo do foguete — todos exigidos pelo método de Barrowman. Por
-isso, `FinSetGeometry` é recebida como parâmetro explícito, e não derivada
-do `RocketConfig`.
 """
 
 import math
 from dataclasses import dataclass
 
+from app.schemas import RocketConfig
 from app.structure.schemas import NoseConeShape
 
 _NOSE_CONE_NORMAL_FORCE_COEFFICIENT_SLOPE = 2.0
@@ -52,6 +47,25 @@ class CenterOfPressureModel:
     nose_cone_shape: NoseConeShape
     nose_cone_length_m: float
     fins: FinSetGeometry
+
+    @classmethod
+    def from_rocket_config(cls, config: RocketConfig) -> "CenterOfPressureModel":
+        structure = config.structure
+        fins_schema = structure.fins
+        fins = FinSetGeometry(
+            count=fins_schema.count,
+            root_chord_m=fins_schema.root_chord_m,
+            tip_chord_m=fins_schema.tip_chord_m,
+            semispan_m=fins_schema.semispan_m,
+            mid_chord_sweep_m=fins_schema.mid_chord_sweep_m,
+            root_leading_edge_position_m=fins_schema.root_leading_edge_position_m,
+            body_radius_at_fins_m=structure.body_diameter_m / 2.0,
+        )
+        return cls(
+            nose_cone_shape=structure.nose_cone.shape,
+            nose_cone_length_m=structure.nose_cone.length_m,
+            fins=fins,
+        )
 
     @property
     def nose_cone_normal_force_coefficient_slope(self) -> float:

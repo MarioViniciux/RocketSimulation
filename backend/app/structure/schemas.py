@@ -24,6 +24,26 @@ class Fins(BaseModel):
     mounting_angle_deg: float = Field(
         ..., ge=-15.0, le=15.0, description="Angulação de montagem (cant) das aletas (graus)."
     )
+    root_chord_m: float = Field(..., gt=0, le=1.0, description="Corda de raiz da aleta (m).")
+    tip_chord_m: float = Field(..., ge=0, le=1.0, description="Corda de ponta da aleta (m).")
+    semispan_m: float = Field(
+        ..., gt=0, le=0.5, description="Envergadura (semi-span) da aleta (m)."
+    )
+    mid_chord_sweep_m: float = Field(
+        ...,
+        ge=0,
+        le=1.0,
+        description=(
+            "Enflechamento: distância paralela ao corpo entre os bordos de ataque "
+            "da raiz e da ponta da aleta (m)."
+        ),
+    )
+    root_leading_edge_position_m: float = Field(
+        ...,
+        ge=0,
+        le=10.0,
+        description="Distância da ponta do nariz até o bordo de ataque da raiz da aleta (m).",
+    )
 
 
 class RailButtons(BaseModel):
@@ -49,6 +69,9 @@ class Structure(BaseModel):
     )
     total_length_m: float = Field(
         ..., gt=0, le=10.0, description="Comprimento total do foguete, com coifa (m)."
+    )
+    body_diameter_m: float = Field(
+        ..., gt=0, le=0.5, description="Diâmetro do corpo (fuselagem) do foguete (m)."
     )
     nose_cone: NoseCone
     fins: Fins
