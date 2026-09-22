@@ -25,16 +25,16 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar schema agregador `RocketConfig` que compõe todos os módulos em um único payload de entrada.
 
 ## Fase 3 — Backend: Motor de Simulação Física
-- [ ] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
-- [ ] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
-- [ ] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
-- [ ] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
-- [ ] Implementar cálculo de Centro de Massa (CM) e Centro de Pressão (CP) ao longo do voo.
-- [ ] Implementar cálculo de margem de estabilidade estática (em calibres).
-- [ ] Implementar integrador das equações de movimento (3-DoF inicialmente; 6-DoF como extensão futura).
-- [ ] Implementar lógica de eventos de voo: burnout, apogeu, ativação do drogue, ativação do main, pouso.
-- [ ] Implementar cálculo de velocidade terminal sob paraquedas (drogue e/ou main).
-- [ ] Gerar vetores temporais de saída: altitude $h(t)$, velocidade vertical $v_z(t)$, aceleração vertical $a_z(t)$.
+- [x] Implementar modelo de massa variável (queima de propelente ao longo do tempo).
+- [x] Implementar cálculo de empuxo/impulso a partir dos parâmetros do motor.
+- [x] Implementar modelo atmosférico (densidade, pressão, gravidade local em função da altitude/coordenadas).
+- [x] Implementar cálculo de arrasto aerodinâmico (subsônico/compressível, considerando Número de Mach).
+- [x] Implementar cálculo de Centro de Massa (CM) e Centro de Pressão (CP) ao longo do voo.
+- [x] Implementar cálculo de margem de estabilidade estática (em calibres).
+- [x] Implementar integrador das equações de movimento (3-DoF inicialmente; 6-DoF como extensão futura).
+- [x] Implementar lógica de eventos de voo: burnout, apogeu, ativação do drogue, ativação do main, pouso.
+- [x] Implementar cálculo de velocidade terminal sob paraquedas (drogue e/ou main).
+- [x] Gerar vetores temporais de saída: altitude $h(t)$, velocidade vertical $v_z(t)$, aceleração vertical $a_z(t)$.
 
 ## Fase 4 — Backend: API de Simulação
 - [ ] Criar endpoint `POST /simulate` que recebe `RocketConfig` e retorna os resultados estruturados.
