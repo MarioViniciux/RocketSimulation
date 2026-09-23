@@ -1,0 +1,28 @@
+# Deploy do simulador completo (backend + frontend) com Docker Compose.
+# Configuração em `.env` (copie de `.env.example`); ver `DEPLOY.md`.
+#
+#   docker compose up -d --build
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      # Origem pública do frontend (as requisições partem do navegador).
+      CORS_ALLOW_ORIGINS: ${FRONTEND_PUBLIC_URL:-http://localhost:3000}
+      WEB_CONCURRENCY: ${BACKEND_WORKERS:-2}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # URL pública da API, embutida no bundle no build: ao mudar, rode
+        # `docker compose up -d --build` de novo.
+        NEXT_PUBLIC_API_BASE_URL: ${API_PUBLIC_URL:-http://localhost:8000}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"

@@ -12,6 +12,7 @@ from app.docs import (
     SIMULATION_ERROR_RESPONSE_EXAMPLES,
 )
 from app.schemas import ErrorResponse, HealthCheckResponse, RocketConfig
+from app.settings import cors_allow_origins
 from app.simulation.exceptions import SimulationError
 from app.simulation.schemas import SimulationResult
 from app.simulation.simulate import run_simulation
@@ -25,7 +26,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=cors_allow_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

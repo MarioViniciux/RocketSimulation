@@ -77,7 +77,8 @@ A aplicação sobe em `http://localhost:3000`.
 | Comando | O que faz |
 |---|---|
 | `npm run dev` | Servidor de desenvolvimento |
-| `npm run build` / `npm start` | Build e servidor de produção |
+| `npm run build` / `npm start` | Build de produção e pré-visualização local |
+| `npm run build:standalone` / `npm run start:standalone` | Build e servidor de produção (ver `DEPLOY.md`) |
 | `npm run lint` | Lint (ESLint) |
 | `npm test` | Testes end-to-end (Playwright), ver abaixo |
 
@@ -87,7 +88,7 @@ A aplicação sobe em `http://localhost:3000`.
 |---|---|---|
 | `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | URL base da API do backend. Lida no build: ao mudar, gere o build de novo. |
 
-O backend aceita requisições (CORS) apenas da origem `http://localhost:3000`, configurada em `backend/app/main.py`. Para servir o frontend em outra origem, inclua-a em `allow_origins`.
+O backend aceita requisições (CORS) apenas das origens em `CORS_ALLOW_ORIGINS` (separadas por vírgula; padrão `http://localhost:3000`). Para servir o frontend em outra origem, defina essa variável no backend.
 
 ### Rodando o projeto completo
 
@@ -97,6 +98,10 @@ O backend aceita requisições (CORS) apenas da origem `http://localhost:3000`, 
    - **Entrada de Dados**: preencha os parâmetros de cada subsistema. Os valores iniciais já formam uma configuração válida de exemplo.
    - **Visualizador**: veja o foguete em 3D ou 2D, atualizado conforme as dimensões informadas.
    - **Resultados**: após **Executar Simulação**, veja os KPIs e os gráficos do voo.
+
+## Deploy
+
+Veja o [`DEPLOY.md`](DEPLOY.md): Docker Compose (`docker compose up -d --build`), imagens Docker separadas, deploy sem Docker (systemd), proxy reverso/HTTPS, variáveis de configuração e o script de verificação pós-deploy (`scripts/smoke-test.sh`).
 
 ## API
 
