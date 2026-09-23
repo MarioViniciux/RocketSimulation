@@ -1,7 +1,10 @@
 import { API_BASE_URL } from "./config";
 import { ApiError, type ApiErrorDetail } from "./errors";
 
-type JsonBody = Record<string, unknown> | unknown[];
+// `object` (não `Record<string, unknown>`): interfaces concretas como
+// `RocketConfig` não têm assinatura de índice, então não seriam aceitas
+// pelo tipo mais estrito, mesmo sendo perfeitamente serializáveis.
+type JsonBody = object;
 
 async function parseErrorDetail(response: Response): Promise<ApiErrorDetail> {
   try {
