@@ -3,8 +3,8 @@ import type { RocketConfig } from "@/types";
 
 /** Valores iniciais do formulário do `RocketConfig`, preenchidos
  * incrementalmente conforme cada formulário de subsistema é criado (Fase 6).
- * Os valores de Propulsão replicam a configuração estável e com empuxo
- * suficiente validada em `backend/tests/api/test_simulate_endpoint.py`. */
+ * Os valores replicam a configuração estável e com empuxo suficiente
+ * validada em `backend/tests/api/test_simulate_endpoint.py`. */
 export const ROCKET_CONFIG_DEFAULT_VALUES: DefaultValues<RocketConfig> = {
   propulsion: {
     combustion_chamber: { length_m: 0.5, diameter_m: 0.1, empty_mass_kg: 1.0 },
@@ -22,5 +22,13 @@ export const ROCKET_CONFIG_DEFAULT_VALUES: DefaultValues<RocketConfig> = {
       pressure_impulse_ns: 50,
       exhaust_velocity_m_s: 1500,
     },
+  },
+  avionics: {
+    mass_kg: 0.5,
+    position_x_m: 0.3,
+    position_y_m: 0.0,
+    position_z_m: 0.0,
+    diameter_m: 0.08,
+    length_m: 0.15,
   },
 };

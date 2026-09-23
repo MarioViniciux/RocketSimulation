@@ -1,3 +1,4 @@
+import { AvionicsForm } from "@/components/forms/AvionicsForm";
 import { PropulsionForm } from "@/components/forms/PropulsionForm";
 
 export function InputPanel() {
@@ -15,6 +16,11 @@ export function InputPanel() {
       <section className="flex flex-col gap-4">
         <h3 className="text-base font-semibold">Propulsão</h3>
         <PropulsionForm />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h3 className="text-base font-semibold">Aviônica</h3>
+        <AvionicsForm />
       </section>
     </div>
   );
