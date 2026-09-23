@@ -52,7 +52,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 ## Fase 6 — Frontend: Formulários de Entrada por Subsistema
 - [x] Criar formulário do subsistema Propulsão.
 - [x] Criar formulário do subsistema Aviônica.
-- [ ] Criar formulário do subsistema Payload.
+- [x] Criar formulário do subsistema Payload.
 - [ ] Criar formulário do subsistema Estrutura.
 - [ ] Criar formulário do subsistema Recuperação.
 - [ ] Criar formulário do subsistema Ambiente/Localização.

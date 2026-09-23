@@ -31,4 +31,12 @@ export const ROCKET_CONFIG_DEFAULT_VALUES: DefaultValues<RocketConfig> = {
     diameter_m: 0.08,
     length_m: 0.15,
   },
+  payload: {
+    mass_kg: 0.5,
+    position_x_m: 0.6,
+    position_y_m: 0.0,
+    position_z_m: 0.0,
+    diameter_m: 0.08,
+    length_m: 0.15,
+  },
 };
