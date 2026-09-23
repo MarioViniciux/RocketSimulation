@@ -47,7 +47,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Inicializar projeto Next.js com TypeScript.
 - [x] Configurar cliente HTTP para consumir a API do backend.
 - [x] Definir estrutura de rotas/páginas: entrada de dados, visualizador, dashboard de resultados.
-- [ ] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
+- [x] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
 
 ## Fase 6 — Frontend: Formulários de Entrada por Subsistema
 - [ ] Criar formulário do subsistema Propulsão.
