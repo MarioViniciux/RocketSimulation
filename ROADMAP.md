@@ -44,41 +44,41 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Escrever testes de integração para o endpoint `/simulate`.
 
 ## Fase 5 — Frontend: Base do Next.js
-- [ ] Inicializar projeto Next.js com TypeScript.
-- [ ] Configurar cliente HTTP para consumir a API do backend.
-- [ ] Definir estrutura de rotas/páginas: entrada de dados, visualizador, dashboard de resultados.
-- [ ] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
+- [x] Inicializar projeto Next.js com TypeScript.
+- [x] Configurar cliente HTTP para consumir a API do backend.
+- [x] Definir estrutura de rotas/páginas: entrada de dados, visualizador, dashboard de resultados.
+- [x] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
 
 ## Fase 6 — Frontend: Formulários de Entrada por Subsistema
-- [ ] Criar formulário do subsistema Propulsão.
-- [ ] Criar formulário do subsistema Aviônica.
-- [ ] Criar formulário do subsistema Payload.
-- [ ] Criar formulário do subsistema Estrutura.
-- [ ] Criar formulário do subsistema Recuperação.
-- [ ] Criar formulário do subsistema Ambiente/Localização.
-- [ ] Implementar validação client-side consistente com os limites definidos no backend.
-- [ ] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
+- [x] Criar formulário do subsistema Propulsão.
+- [x] Criar formulário do subsistema Aviônica.
+- [x] Criar formulário do subsistema Payload.
+- [x] Criar formulário do subsistema Estrutura.
+- [x] Criar formulário do subsistema Recuperação.
+- [x] Criar formulário do subsistema Ambiente/Localização.
+- [x] Implementar validação client-side consistente com os limites definidos no backend.
+- [x] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
 
 ## Fase 7 — Frontend: Visualizador Interativo 2D/3D
-- [ ] Configurar Three.js/WebGL no Next.js.
-- [ ] Implementar renderização 3D do foguete a partir das dimensões/diâmetros/posições informadas.
-- [ ] Implementar renderização 2D equivalente como fallback leve e fluido.
-- [ ] Implementar alternância de visualização entre modos 2D e 3D.
-- [ ] Implementar detecção de suporte a WebGL com fallback automático para 2D.
+- [x] Configurar Three.js/WebGL no Next.js.
+- [x] Implementar renderização 3D do foguete a partir das dimensões/diâmetros/posições informadas.
+- [x] Implementar renderização 2D equivalente como fallback leve e fluido.
+- [x] Implementar alternância de visualização entre modos 2D e 3D.
+- [x] Implementar detecção de suporte a WebGL com fallback automático para 2D.
 
 ## Fase 8 — Frontend: Dashboard de Resultados
-- [ ] Implementar exibição dos KPIs (apogeu, estabilidade, velocidade terminal, tempo de queima).
-- [ ] Implementar gráfico de altitude ao longo do tempo.
-- [ ] Implementar gráficos de aceleração e velocidade vertical ao longo do tempo.
-- [ ] Implementar estados de carregamento/erro durante a chamada à API de simulação.
+- [x] Implementar exibição dos KPIs (apogeu, estabilidade, velocidade terminal, tempo de queima).
+- [x] Implementar gráfico de altitude ao longo do tempo.
+- [x] Implementar gráficos de aceleração e velocidade vertical ao longo do tempo.
+- [x] Implementar estados de carregamento/erro durante a chamada à API de simulação.
 
 ## Fase 9 — Integração e Fluxo Completo
-- [ ] Conectar fluxo completo: preenchimento dos formulários → chamada `/simulate` → visualizador atualizado → dashboard populado.
-- [ ] Validar consistência de unidades SI em toda a comunicação frontend-backend.
-- [ ] Testes end-to-end do fluxo principal (entrada → simulação → resultados).
+- [x] Conectar fluxo completo: preenchimento dos formulários → chamada `/simulate` → visualizador atualizado → dashboard populado.
+- [x] Validar consistência de unidades SI em toda a comunicação frontend-backend.
+- [x] Testes end-to-end do fluxo principal (entrada → simulação → resultados).
 
 ## Fase 10 — Polimento e Entrega
-- [ ] Revisar UX dos formulários (agrupamento por subsistema, mensagens de validação claras).
-- [ ] Revisar performance da renderização 3D em dispositivos modestos.
-- [ ] Documentar a API (OpenAPI/Swagger já gerado pelo FastAPI) e revisar README com instruções finais.
-- [ ] Preparar scripts/documentação de deploy (backend e frontend).
+- [x] Revisar UX dos formulários (agrupamento por subsistema, mensagens de validação claras).
+- [x] Revisar performance da renderização 3D em dispositivos modestos.
+- [x] Documentar a API (OpenAPI/Swagger já gerado pelo FastAPI) e revisar README com instruções finais.
+- [x] Preparar scripts/documentação de deploy (backend e frontend).

@@ -64,8 +64,10 @@ class ThermodynamicImpulseParameters(BaseModel):
 class Propulsion(BaseModel):
     """Módulo agregador de Propulsão."""
 
-    combustion_chamber: CombustionChamber
-    propellant_grain: PropellantGrain
-    nozzle: Nozzle
-    dry_inertia: DryInertia
-    thermodynamic_impulse_parameters: ThermodynamicImpulseParameters
+    combustion_chamber: CombustionChamber = Field(..., description="Câmara de combustão.")
+    propellant_grain: PropellantGrain = Field(..., description="Grão propelente.")
+    nozzle: Nozzle = Field(..., description="Bocal convergente-divergente.")
+    dry_inertia: DryInertia = Field(..., description="Inércia e centro de massa a seco.")
+    thermodynamic_impulse_parameters: ThermodynamicImpulseParameters = Field(
+        ..., description="Parâmetros termodinâmicos e de impulso."
+    )

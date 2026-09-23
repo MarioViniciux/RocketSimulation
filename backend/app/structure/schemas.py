@@ -88,6 +88,6 @@ class Structure(BaseModel):
             "(escoamento subsônico incompressível)."
         ),
     )
-    nose_cone: NoseCone
-    fins: Fins
-    rail_buttons: RailButtons
+    nose_cone: NoseCone = Field(..., description="Coifa (nose cone).")
+    fins: Fins = Field(..., description="Aletas (geometria de planta para o CP de Barrowman).")
+    rail_buttons: RailButtons = Field(..., description="Guias de lançamento (rail buttons).")
