@@ -1,4 +1,5 @@
 import { SimulationKpis } from "@/components/results/SimulationKpis";
+import { TimeSeriesLineChart } from "@/components/results/TimeSeriesLineChart";
 import type { SimulationResult } from "@/types";
 
 // Estado local sem setter: ainda não há como disparar uma simulação pela
@@ -20,7 +21,16 @@ export function ResultsPanel() {
       </div>
 
       {simulationResult ? (
-        <SimulationKpis result={simulationResult} />
+        <>
+          <SimulationKpis result={simulationResult} />
+          <TimeSeriesLineChart
+            title="Altitude"
+            unit="m"
+            times={simulationResult.time_series.times_s}
+            values={simulationResult.time_series.altitudes_m}
+            peakLabel="Apogeu"
+          />
+        </>
       ) : (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           Ainda não há uma simulação executada. A chamada a{" "}
