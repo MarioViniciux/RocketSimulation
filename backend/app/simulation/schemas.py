@@ -31,4 +31,6 @@ class SimulationResult(BaseModel):
     main_terminal_velocity_m_s: float = Field(
         ..., description="Velocidade terminal sob o main (m/s)."
     )
-    time_series: FlightTimeSeriesOutput
+    time_series: FlightTimeSeriesOutput = Field(
+        ..., description="Séries temporais do voo, para plotagem."
+    )
