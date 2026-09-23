@@ -89,6 +89,7 @@ export function RecoveryForm() {
             name="recovery.parachutes_mass_kg"
             label="Massa dos paraquedas"
             unit="kg"
+            hint="Com drogue, some as massas do drogue e do main."
           />
           <NumberField
             name="recovery.piston_cap_mass_kg"
@@ -99,8 +100,14 @@ export function RecoveryForm() {
             name="recovery.ejection_charge_mass_kg"
             label="Massa de pólvora de ejeção"
             unit="kg"
+            hint="Em kg: 5 g = 0,005 kg."
           />
-          <NumberField name="recovery.center_of_mass_m" label="Centro de massa" unit="m" />
+          <NumberField
+            name="recovery.center_of_mass_m"
+            label="Centro de massa"
+            unit="m"
+            hint="Medida a partir da ponta da coifa. Centro de massa do conjunto de recuperação."
+          />
         </div>
       </fieldset>
 

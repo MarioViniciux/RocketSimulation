@@ -1,6 +1,8 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
+import { countFieldErrors } from "@/lib/count-field-errors";
+import { SUBSYSTEMS, subsystemSectionId } from "@/lib/subsystems";
 import type { RocketConfig } from "@/types";
 import { useSimulation } from "./SimulationProvider";
 
@@ -19,6 +21,10 @@ export function SimulateButton({ onSimulated }: SimulateButtonProps) {
   const { handleSubmit, formState } = useFormContext<RocketConfig>();
   const { runSimulation, state } = useSimulation();
   const isSubmitting = state.status === "loading";
+  const subsystemsWithErrors = SUBSYSTEMS.map((subsystem) => ({
+    ...subsystem,
+    errorCount: countFieldErrors(formState.errors[subsystem.key]),
+  })).filter((subsystem) => subsystem.errorCount > 0);
 
   const onSubmit = handleSubmit(async (config) => {
     await runSimulation(config);
@@ -35,10 +41,21 @@ export function SimulateButton({ onSimulated }: SimulateButtonProps) {
       >
         {isSubmitting ? "Simulando…" : "Executar Simulação"}
       </button>
-      {formState.submitCount > 0 && !formState.isValid ? (
-        <p role="alert" className="text-sm text-red-600">
-          Corrija os campos destacados antes de executar a simulação.
-        </p>
+      {formState.submitCount > 0 && subsystemsWithErrors.length > 0 ? (
+        <div role="alert" className="flex flex-col gap-1 text-sm text-red-600 dark:text-red-400">
+          <p>Corrija os campos destacados antes de executar a simulação:</p>
+          <ul className="list-disc pl-5">
+            {subsystemsWithErrors.map((subsystem) => (
+              <li key={subsystem.key}>
+                <a href={`#${subsystemSectionId(subsystem.key)}`} className="underline">
+                  {subsystem.label}
+                </a>{" "}
+                — {subsystem.errorCount}{" "}
+                {subsystem.errorCount === 1 ? "campo inválido" : "campos inválidos"}
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
     </div>
   );

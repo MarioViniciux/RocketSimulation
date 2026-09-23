@@ -67,7 +67,12 @@ export function PropulsionForm() {
             unit="m"
           />
           <NumberField name="propulsion.nozzle.length_m" label="Comprimento" unit="m" />
-          <NumberField name="propulsion.nozzle.position_m" label="Posição" unit="m" />
+          <NumberField
+            name="propulsion.nozzle.position_m"
+            label="Posição"
+            unit="m"
+            hint="Medida a partir da ponta da coifa."
+          />
         </div>
       </fieldset>
 
@@ -85,6 +90,7 @@ export function PropulsionForm() {
             name="propulsion.dry_inertia.dry_center_of_mass_m"
             label="Centro de massa seco (CMₛ)"
             unit="m"
+            hint="Medida a partir da ponta da coifa."
           />
         </div>
       </fieldset>
@@ -98,6 +104,7 @@ export function PropulsionForm() {
             name="propulsion.thermodynamic_impulse_parameters.reference_pressure_pa"
             label="Pressão de referência"
             unit="Pa"
+            hint="Ex.: 5 MPa = 5000000 Pa."
           />
           <NumberField
             name="propulsion.thermodynamic_impulse_parameters.total_impulse_ns"

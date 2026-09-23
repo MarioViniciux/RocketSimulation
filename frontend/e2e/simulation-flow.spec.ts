@@ -174,9 +174,21 @@ test("validação client-side bloqueia a chamada a /simulate com campos inválid
 
   await page.getByRole("button", { name: "Executar Simulação" }).click();
 
+  // Resumo lista o subsistema com erro (com link para a seção), e o campo
+  // mostra a faixa válida completa.
+  const summary = page.getByRole("alert").filter({ hasText: "Corrija os campos destacados" });
+  await expect(summary).toBeVisible();
+  await expect(summary.getByRole("link", { name: "Estrutura" })).toHaveAttribute(
+    "href",
+    "#subsystem-structure",
+  );
+  await expect(summary).toContainText("1 campo inválido");
   await expect(
-    page.getByText("Corrija os campos destacados antes de executar a simulação."),
-  ).toBeVisible();
+    page.getByRole("navigation", { name: "Subsistemas" }).getByRole("link", { name: /Estrutura/ }),
+  ).toContainText("1 erro");
+  await expect(field(page, "structure.body_diameter_m")).toHaveAccessibleDescription(
+    "Valor fora da faixa: deve ser maior que 0 e no máximo 0,5 m.",
+  );
   await expect(page.getByRole("tab", { name: "Entrada de Dados" })).toHaveAttribute(
     "aria-selected",
     "true",

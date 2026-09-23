@@ -7,8 +7,18 @@ import { NumberField } from "./fields/NumberField";
 export function EnvironmentForm() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <NumberField name="environment.latitude_deg" label="Latitude" unit="graus" />
-      <NumberField name="environment.longitude_deg" label="Longitude" unit="graus" />
+      <NumberField
+        name="environment.latitude_deg"
+        label="Latitude"
+        unit="graus"
+        hint="Positiva ao norte do Equador."
+      />
+      <NumberField
+        name="environment.longitude_deg"
+        label="Longitude"
+        unit="graus"
+        hint="Positiva a leste de Greenwich."
+      />
       <NumberField
         name="environment.elevation_m"
         label="Elevação (nível do mar)"
@@ -28,6 +38,7 @@ export function EnvironmentForm() {
         name="environment.launch_rail_angle_deg"
         label="Inclinação do trilho (a partir da vertical)"
         unit="graus"
+        hint="0° = trilho vertical."
       />
     </div>
   );

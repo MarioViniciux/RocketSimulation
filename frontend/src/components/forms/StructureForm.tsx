@@ -31,11 +31,17 @@ export function StructureForm() {
             unit="m"
           />
           <NumberField name="structure.body_diameter_m" label="Diâmetro do corpo" unit="m" />
-          <NumberField name="structure.center_of_mass_m" label="Centro de massa" unit="m" />
+          <NumberField
+            name="structure.center_of_mass_m"
+            label="Centro de massa"
+            unit="m"
+            hint="Medida a partir da ponta da coifa."
+          />
           <NumberField
             name="structure.drag_coefficient"
             label="Coeficiente de arrasto (Cd)"
             unit="adimensional"
+            hint="Referência em baixo Número de Mach; a correção de compressibilidade é aplicada na simulação."
           />
         </div>
       </fieldset>
@@ -77,11 +83,13 @@ export function StructureForm() {
             name="structure.fins.mid_chord_sweep_m"
             label="Enflechamento"
             unit="m"
+            hint="Distância axial entre os bordos de ataque da raiz e da ponta."
           />
           <NumberField
             name="structure.fins.root_leading_edge_position_m"
             label="Posição do bordo de ataque da raiz"
             unit="m"
+            hint="Medida a partir da ponta da coifa."
           />
         </div>
       </fieldset>
@@ -92,7 +100,12 @@ export function StructureForm() {
         </legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <NumberField name="structure.rail_buttons.count" label="Quantidade" unit="un" step={1} />
-          <NumberField name="structure.rail_buttons.angle_deg" label="Angulação" unit="graus" />
+          <NumberField
+            name="structure.rail_buttons.angle_deg"
+            label="Angulação"
+            unit="graus"
+            hint="Posição angular ao redor da fuselagem."
+          />
         </div>
       </fieldset>
     </div>

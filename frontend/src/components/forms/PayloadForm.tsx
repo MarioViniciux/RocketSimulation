@@ -10,9 +10,24 @@ export function PayloadForm() {
       <NumberField name="payload.mass_kg" label="Massa" unit="kg" />
       <NumberField name="payload.diameter_m" label="Diâmetro" unit="m" />
       <NumberField name="payload.length_m" label="Comprimento" unit="m" />
-      <NumberField name="payload.position_x_m" label="Posição X" unit="m" />
-      <NumberField name="payload.position_y_m" label="Posição Y" unit="m" />
-      <NumberField name="payload.position_z_m" label="Posição Z" unit="m" />
+      <NumberField
+        name="payload.position_x_m"
+        label="Posição X"
+        unit="m"
+        hint="Medida a partir da ponta da coifa."
+      />
+      <NumberField
+        name="payload.position_y_m"
+        label="Posição Y"
+        unit="m"
+        hint="Deslocamento lateral em relação ao eixo do foguete."
+      />
+      <NumberField
+        name="payload.position_z_m"
+        label="Posição Z"
+        unit="m"
+        hint="Deslocamento lateral em relação ao eixo do foguete."
+      />
     </div>
   );
 }

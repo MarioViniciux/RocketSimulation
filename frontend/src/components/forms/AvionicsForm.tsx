@@ -9,9 +9,24 @@ export function AvionicsForm() {
       <NumberField name="avionics.mass_kg" label="Massa" unit="kg" />
       <NumberField name="avionics.diameter_m" label="Diâmetro" unit="m" />
       <NumberField name="avionics.length_m" label="Comprimento" unit="m" />
-      <NumberField name="avionics.position_x_m" label="Posição X" unit="m" />
-      <NumberField name="avionics.position_y_m" label="Posição Y" unit="m" />
-      <NumberField name="avionics.position_z_m" label="Posição Z" unit="m" />
+      <NumberField
+        name="avionics.position_x_m"
+        label="Posição X"
+        unit="m"
+        hint="Medida a partir da ponta da coifa."
+      />
+      <NumberField
+        name="avionics.position_y_m"
+        label="Posição Y"
+        unit="m"
+        hint="Deslocamento lateral em relação ao eixo do foguete."
+      />
+      <NumberField
+        name="avionics.position_z_m"
+        label="Posição Z"
+        unit="m"
+        hint="Deslocamento lateral em relação ao eixo do foguete."
+      />
     </div>
   );
 }
