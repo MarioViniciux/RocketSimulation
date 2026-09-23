@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { finOutlinePoints, noseConeRadiusAt } from "@/lib/rocket-geometry";
-import type { Fins, NoseConeShape, RocketConfig } from "@/types";
+import type { NoseConeShape, Structure } from "@/types";
 
-const RADIAL_SEGMENTS = 48;
-const NOSE_PROFILE_SEGMENTS = 32;
 /** As aletas não têm campo de espessura no schema; usa-se um valor fixo
  * pequeno só para dar volume visual ao painel (puramente estético). */
 const FIN_THICKNESS_M = 0.003;
@@ -22,30 +20,54 @@ function buildNoseConeGeometry(
   shape: NoseConeShape,
   length: number,
   baseRadius: number,
+  profileSegments: number,
+  radialSegments: number,
 ): THREE.LatheGeometry {
   const points: THREE.Vector2[] = [];
-  for (let i = 0; i <= NOSE_PROFILE_SEGMENTS; i++) {
-    const x = (i / NOSE_PROFILE_SEGMENTS) * length;
+  for (let i = 0; i <= profileSegments; i++) {
+    const x = (i / profileSegments) * length;
     const radius = Math.max(noseConeRadiusAt(shape, x, length, baseRadius), 0);
     points.push(new THREE.Vector2(radius, -x));
   }
-  return new THREE.LatheGeometry(points, RADIAL_SEGMENTS);
+  return new THREE.LatheGeometry(points, radialSegments);
 }
 
-function buildFinShape(fins: Fins): THREE.Shape {
-  const [rootLeadingEdge, rootTrailingEdge, tipTrailingEdge, tipLeadingEdge] =
-    finOutlinePoints(fins);
+function buildFinGeometry(
+  rootChord: number,
+  tipChord: number,
+  semispan: number,
+  midChordSweep: number,
+): THREE.ExtrudeGeometry {
+  const [rootLeadingEdge, rootTrailingEdge, tipTrailingEdge, tipLeadingEdge] = finOutlinePoints({
+    root_chord_m: rootChord,
+    tip_chord_m: tipChord,
+    semispan_m: semispan,
+    mid_chord_sweep_m: midChordSweep,
+  });
   const shape = new THREE.Shape();
   shape.moveTo(rootLeadingEdge.x, rootLeadingEdge.y);
   shape.lineTo(rootTrailingEdge.x, rootTrailingEdge.y);
   shape.lineTo(tipTrailingEdge.x, tipTrailingEdge.y);
   shape.lineTo(tipLeadingEdge.x, tipLeadingEdge.y);
   shape.closePath();
-  return shape;
+  return new THREE.ExtrudeGeometry(shape, { depth: FIN_THICKNESS_M, bevelEnabled: false });
+}
+
+/** Libera os buffers de GPU de um recurso criado imperativamente (via
+ * `useMemo`) quando ele é substituído ou o componente desmonta — o
+ * react-three-fiber só descarta automaticamente o que ele próprio cria de
+ * forma declarativa (ex.: `<cylinderGeometry />`), não objetos passados
+ * por prop (`geometry={...}`, `material={...}`). */
+function useDisposable<T extends { dispose: () => void }>(resource: T): T {
+  useEffect(() => () => resource.dispose(), [resource]);
+  return resource;
 }
 
 interface RocketModelProps {
-  config: RocketConfig;
+  structure: Structure;
+  /** Ver `RenderQuality` (`@/lib/render-quality`). */
+  radialSegments: number;
+  noseProfileSegments: number;
 }
 
 /** Modelo 3D do foguete (corpo, coifa e aletas), com as dimensões,
@@ -54,38 +76,71 @@ interface RocketModelProps {
  *
  * Convenção de eixos: eixo Y do corpo do foguete, `y=0` na cauda e
  * `y=total_length_m` na ponta da coifa (mesma referência usada pelo
- * backend para posições ao longo do eixo do foguete). */
-export function RocketModel({ config }: RocketModelProps) {
-  const { structure } = config;
+ * backend para posições ao longo do eixo do foguete).
+ *
+ * Desempenho: as geometrias dependem só dos campos numéricos que as
+ * definem (não da identidade do objeto `structure`, que muda a cada
+ * alteração em qualquer campo do formulário), então só são recriadas
+ * quando a forma de fato muda; os materiais são criados uma única vez e
+ * compartilhados entre as malhas (inclusive entre todas as aletas). */
+export function RocketModel({ structure, radialSegments, noseProfileSegments }: RocketModelProps) {
   const bodyRadius = structure.body_diameter_m / 2;
   const noseLength = structure.nose_cone.length_m;
+  const noseShape = structure.nose_cone.shape;
   const bodyLength = Math.max(structure.total_length_m - noseLength, 0);
   const bodyCenterY = bodyLength / 2;
+  const { root_chord_m, tip_chord_m, semispan_m, mid_chord_sweep_m } = structure.fins;
 
-  const noseGeometry = useMemo(
-    () => buildNoseConeGeometry(structure.nose_cone.shape, noseLength, bodyRadius),
-    [structure.nose_cone.shape, noseLength, bodyRadius],
+  const bodyMaterial = useDisposable(
+    useMemo(
+      () => new THREE.MeshStandardMaterial({ color: BODY_COLOR, roughness: 0.5, metalness: 0.3 }),
+      [],
+    ),
+  );
+  const finMaterial = useDisposable(
+    useMemo(
+      () => new THREE.MeshStandardMaterial({ color: FIN_COLOR, roughness: 0.6, metalness: 0.1 }),
+      [],
+    ),
   );
 
-  const finGeometry = useMemo(() => {
-    const shape = buildFinShape(structure.fins);
-    return new THREE.ExtrudeGeometry(shape, { depth: FIN_THICKNESS_M, bevelEnabled: false });
-  }, [structure.fins]);
+  const noseGeometry = useDisposable(
+    useMemo(
+      () =>
+        buildNoseConeGeometry(
+          noseShape,
+          noseLength,
+          bodyRadius,
+          noseProfileSegments,
+          radialSegments,
+        ),
+      [noseShape, noseLength, bodyRadius, noseProfileSegments, radialSegments],
+    ),
+  );
 
-  const finRootLeadingEdgeY = structure.total_length_m - structure.fins.root_leading_edge_position_m;
+  const finGeometry = useDisposable(
+    useMemo(
+      () => buildFinGeometry(root_chord_m, tip_chord_m, semispan_m, mid_chord_sweep_m),
+      [root_chord_m, tip_chord_m, semispan_m, mid_chord_sweep_m],
+    ),
+  );
+
+  const finRootLeadingEdgeY =
+    structure.total_length_m - structure.fins.root_leading_edge_position_m;
   const finMountingAngleRad = THREE.MathUtils.degToRad(structure.fins.mounting_angle_deg);
   const finIndices = Array.from({ length: structure.fins.count }, (_, index) => index);
 
   return (
     <group>
-      <mesh position={[0, bodyCenterY, 0]}>
-        <cylinderGeometry args={[bodyRadius, bodyRadius, bodyLength, RADIAL_SEGMENTS]} />
-        <meshStandardMaterial color={BODY_COLOR} roughness={0.5} metalness={0.3} />
+      <mesh position={[0, bodyCenterY, 0]} material={bodyMaterial}>
+        <cylinderGeometry args={[bodyRadius, bodyRadius, bodyLength, radialSegments]} />
       </mesh>
 
-      <mesh geometry={noseGeometry} position={[0, structure.total_length_m, 0]}>
-        <meshStandardMaterial color={BODY_COLOR} roughness={0.5} metalness={0.3} />
-      </mesh>
+      <mesh
+        geometry={noseGeometry}
+        material={bodyMaterial}
+        position={[0, structure.total_length_m, 0]}
+      />
 
       {finIndices.map((index) => (
         <group key={index} rotation={[0, (index * 2 * Math.PI) / structure.fins.count, 0]}>
@@ -93,9 +148,11 @@ export function RocketModel({ config }: RocketModelProps) {
             {/* Realinha o plano de projeto da aleta (corda ao longo do
              * corpo, envergadura radial) para a orientação 3D correta. */}
             <group rotation={[0, 0, -Math.PI / 2]}>
-              <mesh geometry={finGeometry} rotation={[finMountingAngleRad, 0, 0]}>
-                <meshStandardMaterial color={FIN_COLOR} roughness={0.6} metalness={0.1} />
-              </mesh>
+              <mesh
+                geometry={finGeometry}
+                material={finMaterial}
+                rotation={[finMountingAngleRad, 0, 0]}
+              />
             </group>
           </group>
         </group>

@@ -19,8 +19,21 @@ const VIEW_MODES = [
 
 type ViewMode = (typeof VIEW_MODES)[number]["id"];
 
-export function VisualizerPanel() {
+interface VisualizerPanelProps {
+  /** `true` enquanto a aba do visualizador está visível. */
+  isActive: boolean;
+}
+
+export function VisualizerPanel({ isActive }: VisualizerPanelProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("3d");
+  // O canvas 3D (bundle do Three.js + contexto WebGL) só é criado na
+  // primeira vez que a aba é aberta — quem nunca abre o visualizador não
+  // paga esse custo — e depois permanece montado (ver `RocketCanvas`, que
+  // pausa a renderização enquanto a aba está oculta).
+  const [hasBeenActive, setHasBeenActive] = useState(isActive);
+  if (isActive && !hasBeenActive) {
+    setHasBeenActive(true);
+  }
   const [webglRuntimeFailure, setWebglRuntimeFailure] = useState(false);
   const webglSupported = useWebGLSupport();
   const config = useRocketConfigValues();
@@ -82,7 +95,7 @@ export function VisualizerPanel() {
             fallback={<RocketSilhouette2D config={config} />}
             onError={() => setWebglRuntimeFailure(true)}
           >
-            <RocketCanvas />
+            {hasBeenActive ? <RocketCanvas active={isActive} /> : null}
           </RocketCanvasErrorBoundary>
         ) : (
           <RocketSilhouette2D config={config} />

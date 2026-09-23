@@ -42,7 +42,9 @@ export interface Point2D {
  * bordo de fuga da ponta, bordo de ataque da ponta, nessa ordem (forma um
  * polígono fechado). Pura (sem Three.js), pelo mesmo motivo de
  * `noseConeRadiusAt`. */
-export function finOutlinePoints(fins: Fins): [Point2D, Point2D, Point2D, Point2D] {
+export function finOutlinePoints(
+  fins: Pick<Fins, "root_chord_m" | "tip_chord_m" | "semispan_m" | "mid_chord_sweep_m">,
+): [Point2D, Point2D, Point2D, Point2D] {
   return [
     { x: 0, y: 0 },
     { x: fins.root_chord_m, y: 0 },

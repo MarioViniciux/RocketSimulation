@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { field, fillField, waitForHydration } from "./helpers";
 import type { RocketConfig, SimulationResult } from "@/types";
 
 /** Testes end-to-end do fluxo principal (Fase 9 do `ROADMAP.md`):
@@ -9,20 +10,6 @@ import type { RocketConfig, SimulationResult } from "@/types";
  * determinística com o backend real. */
 
 const SIMULATE_PATH = "/simulate";
-
-/** Campo numérico do `RocketConfig`, localizado pelo `name` que o
- * `register` do React Hook Form atribui ao `<input>` (ex.:
- * `structure.total_length_m`). */
-function field(page: Page, name: string) {
-  return page.locator(`input[name="${name}"]`);
-}
-
-async function fillField(page: Page, name: string, value: string) {
-  const input = field(page, name);
-  await input.fill(value);
-  // Validação do formulário é `mode: "onBlur"`.
-  await input.blur();
-}
 
 function isSimulateRequest(url: string, method: string): boolean {
   return method === "POST" && new URL(url).pathname === SIMULATE_PATH;
@@ -41,21 +28,6 @@ function statTile(page: Page, label: string) {
     .getByRole("tabpanel", { name: "Resultados" })
     .locator("div", { has: page.getByText(label, { exact: true }) })
     .last();
-}
-
-/** Aguarda a hidratação do React: antes dela, o HTML do SSR já exibe os
- * campos, mas o que for digitado é sobrescrito quando o React Hook Form
- * registra os `<input>` com os valores padrão. A troca de abas só funciona
- * após a hidratação, então serve de sinal. */
-async function waitForHydration(page: Page) {
-  const inputTab = page.getByRole("tab", { name: "Entrada de Dados" });
-  const visualizerTab = page.getByRole("tab", { name: "Visualizador" });
-  await expect(async () => {
-    await visualizerTab.click();
-    await expect(visualizerTab).toHaveAttribute("aria-selected", "true", { timeout: 500 });
-  }).toPass();
-  await inputTab.click();
-  await expect(inputTab).toHaveAttribute("aria-selected", "true");
 }
 
 test.beforeEach(async ({ page }) => {

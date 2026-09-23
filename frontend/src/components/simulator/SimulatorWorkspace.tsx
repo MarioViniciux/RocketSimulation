@@ -71,7 +71,7 @@ export function SimulatorWorkspace() {
               hidden={activeTab !== "visualizer"}
               className="flex flex-1 flex-col"
             >
-              <VisualizerPanel />
+              <VisualizerPanel isActive={activeTab === "visualizer"} />
             </section>
             <section
               role="tabpanel"

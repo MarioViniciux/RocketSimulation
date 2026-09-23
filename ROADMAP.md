@@ -79,6 +79,6 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 
 ## Fase 10 — Polimento e Entrega
 - [x] Revisar UX dos formulários (agrupamento por subsistema, mensagens de validação claras).
-- [ ] Revisar performance da renderização 3D em dispositivos modestos.
+- [x] Revisar performance da renderização 3D em dispositivos modestos.
 - [ ] Documentar a API (OpenAPI/Swagger já gerado pelo FastAPI) e revisar README com instruções finais.
 - [ ] Preparar scripts/documentação de deploy (backend e frontend).
