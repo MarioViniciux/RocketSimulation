@@ -67,7 +67,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Implementar detecção de suporte a WebGL com fallback automático para 2D.
 
 ## Fase 8 — Frontend: Dashboard de Resultados
-- [ ] Implementar exibição dos KPIs (apogeu, estabilidade, velocidade terminal, tempo de queima).
+- [x] Implementar exibição dos KPIs (apogeu, estabilidade, velocidade terminal, tempo de queima).
 - [ ] Implementar gráfico de altitude ao longo do tempo.
 - [ ] Implementar gráficos de aceleração e velocidade vertical ao longo do tempo.
 - [ ] Implementar estados de carregamento/erro durante a chamada à API de simulação.
