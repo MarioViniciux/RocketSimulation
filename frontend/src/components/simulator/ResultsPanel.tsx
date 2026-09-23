@@ -30,6 +30,23 @@ export function ResultsPanel() {
             values={simulationResult.time_series.altitudes_m}
             peakLabel="Apogeu"
           />
+          {/* Velocidade e aceleração em gráficos separados, não um único
+           * gráfico de eixo duplo: unidades (m/s vs m/s²) e escalas
+           * diferentes tornariam qualquer alinhamento entre as duas
+           * curvas arbitrário — ver skill de visualização de dados,
+           * anti-padrão "dual-axis charts". */}
+          <TimeSeriesLineChart
+            title="Velocidade Vertical"
+            unit="m/s"
+            times={simulationResult.time_series.times_s}
+            values={simulationResult.time_series.vertical_velocities_m_s}
+          />
+          <TimeSeriesLineChart
+            title="Aceleração Vertical"
+            unit="m/s²"
+            times={simulationResult.time_series.times_s}
+            values={simulationResult.time_series.vertical_accelerations_m_s2}
+          />
         </>
       ) : (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
