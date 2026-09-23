@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { ROCKET_CONFIG_DEFAULT_VALUES } from "@/lib/rocket-config-defaults";
+import type { RocketConfig } from "@/types";
 import { InputPanel } from "./InputPanel";
 import { ResultsPanel } from "./ResultsPanel";
 import { VisualizerPanel } from "./VisualizerPanel";
@@ -20,63 +23,68 @@ type TabId = (typeof TABS)[number]["id"];
  * visualizador 2D/3D preserve seu estado ao trocar de aba. */
 export function SimulatorWorkspace() {
   const [activeTab, setActiveTab] = useState<TabId>("input");
+  const formMethods = useForm<RocketConfig>({
+    defaultValues: ROCKET_CONFIG_DEFAULT_VALUES,
+  });
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div
-        role="tablist"
-        aria-label="Etapas do simulador"
-        className="flex border-b border-black/10 dark:border-white/10"
-      >
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            id={`tab-${tab.id}`}
-            aria-selected={activeTab === tab.id}
-            aria-controls={`panel-${tab.id}`}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === tab.id
-                ? "border-b-2 border-foreground text-foreground"
-                : "text-zinc-500 hover:text-foreground dark:text-zinc-400"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
+    <FormProvider {...formMethods}>
       <div className="flex flex-1 flex-col">
-        <section
-          role="tabpanel"
-          id="panel-input"
-          aria-labelledby="tab-input"
-          hidden={activeTab !== "input"}
-          className="flex flex-1 flex-col"
+        <div
+          role="tablist"
+          aria-label="Etapas do simulador"
+          className="flex border-b border-black/10 dark:border-white/10"
         >
-          <InputPanel />
-        </section>
-        <section
-          role="tabpanel"
-          id="panel-visualizer"
-          aria-labelledby="tab-visualizer"
-          hidden={activeTab !== "visualizer"}
-          className="flex flex-1 flex-col"
-        >
-          <VisualizerPanel />
-        </section>
-        <section
-          role="tabpanel"
-          id="panel-results"
-          aria-labelledby="tab-results"
-          hidden={activeTab !== "results"}
-          className="flex flex-1 flex-col"
-        >
-          <ResultsPanel />
-        </section>
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              id={`tab-${tab.id}`}
+              aria-selected={activeTab === tab.id}
+              aria-controls={`panel-${tab.id}`}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-3 text-sm font-medium transition-colors ${
+                activeTab === tab.id
+                  ? "border-b-2 border-foreground text-foreground"
+                  : "text-zinc-500 hover:text-foreground dark:text-zinc-400"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-1 flex-col">
+          <section
+            role="tabpanel"
+            id="panel-input"
+            aria-labelledby="tab-input"
+            hidden={activeTab !== "input"}
+            className="flex flex-1 flex-col"
+          >
+            <InputPanel />
+          </section>
+          <section
+            role="tabpanel"
+            id="panel-visualizer"
+            aria-labelledby="tab-visualizer"
+            hidden={activeTab !== "visualizer"}
+            className="flex flex-1 flex-col"
+          >
+            <VisualizerPanel />
+          </section>
+          <section
+            role="tabpanel"
+            id="panel-results"
+            aria-labelledby="tab-results"
+            hidden={activeTab !== "results"}
+            className="flex flex-1 flex-col"
+          >
+            <ResultsPanel />
+          </section>
+        </div>
       </div>
-    </div>
+    </FormProvider>
   );
 }

@@ -50,7 +50,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Definir tipos TypeScript espelhando os schemas Pydantic do backend.
 
 ## Fase 6 — Frontend: Formulários de Entrada por Subsistema
-- [ ] Criar formulário do subsistema Propulsão.
+- [x] Criar formulário do subsistema Propulsão.
 - [ ] Criar formulário do subsistema Aviônica.
 - [ ] Criar formulário do subsistema Payload.
 - [ ] Criar formulário do subsistema Estrutura.
