@@ -60,7 +60,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
 
 ## Fase 7 — Frontend: Visualizador Interativo 2D/3D
-- [ ] Configurar Three.js/WebGL no Next.js.
+- [x] Configurar Three.js/WebGL no Next.js.
 - [ ] Implementar renderização 3D do foguete a partir das dimensões/diâmetros/posições informadas.
 - [ ] Implementar renderização 2D equivalente como fallback leve e fluido.
 - [ ] Implementar alternância de visualização entre modos 2D e 3D.
