@@ -1,13 +1,9 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { ROCKET_CONFIG_DEFAULT_VALUES } from "@/lib/rocket-config-defaults";
-import { rocketConfigSchema } from "@/lib/validation";
-import type { RocketConfig } from "@/types";
 import { InputPanel } from "./InputPanel";
 import { ResultsPanel } from "./ResultsPanel";
+import { RocketConfigFormProvider } from "./RocketConfigFormProvider";
 import { VisualizerPanel } from "./VisualizerPanel";
 
 const TABS = [
@@ -20,19 +16,15 @@ type TabId = (typeof TABS)[number]["id"];
 
 /** Workspace principal do simulador: entrada de dados, visualizador e
  * dashboard de resultados como abas de uma única página, compartilhando o
- * mesmo estado (sem navegação/recarregamento entre elas). Os painéis
- * permanecem montados (ocultos via `hidden`, não desmontados) para que o
- * visualizador 2D/3D preserve seu estado ao trocar de aba. */
+ * mesmo estado (sem navegação/recarregamento entre elas) via
+ * `RocketConfigFormProvider`. Os painéis permanecem montados (ocultos via
+ * `hidden`, não desmontados) para que o visualizador 2D/3D preserve seu
+ * estado ao trocar de aba. */
 export function SimulatorWorkspace() {
   const [activeTab, setActiveTab] = useState<TabId>("input");
-  const formMethods = useForm<RocketConfig>({
-    defaultValues: ROCKET_CONFIG_DEFAULT_VALUES,
-    resolver: zodResolver(rocketConfigSchema),
-    mode: "onBlur",
-  });
 
   return (
-    <FormProvider {...formMethods}>
+    <RocketConfigFormProvider>
       <div className="flex flex-1 flex-col">
         <div
           role="tablist"
@@ -89,6 +81,6 @@ export function SimulatorWorkspace() {
           </section>
         </div>
       </div>
-    </FormProvider>
+    </RocketConfigFormProvider>
   );
 }

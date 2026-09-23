@@ -57,7 +57,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar formulário do subsistema Recuperação.
 - [x] Criar formulário do subsistema Ambiente/Localização.
 - [x] Implementar validação client-side consistente com os limites definidos no backend.
-- [ ] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
+- [x] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
 
 ## Fase 7 — Frontend: Visualizador Interativo 2D/3D
 - [ ] Configurar Three.js/WebGL no Next.js.
