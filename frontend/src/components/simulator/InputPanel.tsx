@@ -1,4 +1,5 @@
 import { AvionicsForm } from "@/components/forms/AvionicsForm";
+import { EnvironmentForm } from "@/components/forms/EnvironmentForm";
 import { PayloadForm } from "@/components/forms/PayloadForm";
 import { PropulsionForm } from "@/components/forms/PropulsionForm";
 import { RecoveryForm } from "@/components/forms/RecoveryForm";
@@ -39,6 +40,11 @@ export function InputPanel() {
       <section className="flex flex-col gap-4">
         <h3 className="text-base font-semibold">Recuperação</h3>
         <RecoveryForm />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h3 className="text-base font-semibold">Ambiente/Localização</h3>
+        <EnvironmentForm />
       </section>
     </div>
   );

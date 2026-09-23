@@ -74,4 +74,12 @@ export const ROCKET_CONFIG_DEFAULT_VALUES: DefaultValues<RocketConfig> = {
     main_diameter_m: 1.5,
     predicted_search_radius_m: 500.0,
   },
+  environment: {
+    latitude_deg: -23.5,
+    longitude_deg: -46.6,
+    elevation_m: 800.0,
+    wind_speed_m_s: 2.0,
+    launch_rail_length_m: 3.0,
+    launch_rail_angle_deg: 5.0,
+  },
 };

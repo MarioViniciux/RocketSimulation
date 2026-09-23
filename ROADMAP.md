@@ -55,7 +55,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar formulário do subsistema Payload.
 - [x] Criar formulário do subsistema Estrutura.
 - [x] Criar formulário do subsistema Recuperação.
-- [ ] Criar formulário do subsistema Ambiente/Localização.
+- [x] Criar formulário do subsistema Ambiente/Localização.
 - [ ] Implementar validação client-side consistente com os limites definidos no backend.
 - [ ] Implementar estado global/agregado do formulário (ex.: Context, Zustand ou React Hook Form) para compor o `RocketConfig` completo.
 
