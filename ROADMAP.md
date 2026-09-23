@@ -63,7 +63,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Configurar Three.js/WebGL no Next.js.
 - [x] Implementar renderização 3D do foguete a partir das dimensões/diâmetros/posições informadas.
 - [x] Implementar renderização 2D equivalente como fallback leve e fluido.
-- [ ] Implementar alternância de visualização entre modos 2D e 3D.
+- [x] Implementar alternância de visualização entre modos 2D e 3D.
 - [ ] Implementar detecção de suporte a WebGL com fallback automático para 2D.
 
 ## Fase 8 — Frontend: Dashboard de Resultados
