@@ -1,4 +1,5 @@
 import type { DefaultValues } from "react-hook-form";
+import { NoseConeShape } from "@/types";
 import type { RocketConfig } from "@/types";
 
 /** Valores iniciais do formulário do `RocketConfig`, preenchidos
@@ -38,5 +39,23 @@ export const ROCKET_CONFIG_DEFAULT_VALUES: DefaultValues<RocketConfig> = {
     position_z_m: 0.0,
     diameter_m: 0.08,
     length_m: 0.15,
+  },
+  structure: {
+    empty_mass_kg: 3.0,
+    total_length_m: 2.0,
+    body_diameter_m: 0.1,
+    center_of_mass_m: 1.0,
+    drag_coefficient: 0.45,
+    nose_cone: { shape: NoseConeShape.OGIVAL, length_m: 0.3, mass_kg: 0.3 },
+    fins: {
+      count: 3,
+      mounting_angle_deg: 0.0,
+      root_chord_m: 0.15,
+      tip_chord_m: 0.07,
+      semispan_m: 0.08,
+      mid_chord_sweep_m: 0.05,
+      root_leading_edge_position_m: 1.85,
+    },
+    rail_buttons: { count: 2, angle_deg: 180.0 },
   },
 };

@@ -53,7 +53,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 - [x] Criar formulário do subsistema Propulsão.
 - [x] Criar formulário do subsistema Aviônica.
 - [x] Criar formulário do subsistema Payload.
-- [ ] Criar formulário do subsistema Estrutura.
+- [x] Criar formulário do subsistema Estrutura.
 - [ ] Criar formulário do subsistema Recuperação.
 - [ ] Criar formulário do subsistema Ambiente/Localização.
 - [ ] Implementar validação client-side consistente com os limites definidos no backend.
