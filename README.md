@@ -37,8 +37,18 @@ A aplicação sobe por padrão em `http://localhost:3000` e consome a API do bac
 
 Comandos úteis:
 - Lint: `npm run lint`
-- Testes: `npm test`
+- Testes: `npm test` (testes end-to-end com Playwright, ver abaixo)
 - Build de produção: `npm run build`
+
+#### Testes end-to-end
+
+Os testes em `frontend/e2e/` cobrem o fluxo principal (entrada → `POST /simulate` → visualizador → resultados) contra o backend e o frontend reais. O Playwright sobe os dois servidores automaticamente (`uvicorn` na porta 8000, usando `backend/.venv` se existir, e `next dev` na porta 3000), ou reaproveita os que já estiverem rodando.
+
+```bash
+cd frontend
+npx playwright install chromium   # apenas na primeira vez
+npm test
+```
 
 ## Rodando o projeto completo
 

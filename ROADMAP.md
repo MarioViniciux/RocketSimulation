@@ -75,7 +75,7 @@ Lista de tarefas sequenciais para construir o Simulador de Voo para Foguetes de 
 ## Fase 9 — Integração e Fluxo Completo
 - [x] Conectar fluxo completo: preenchimento dos formulários → chamada `/simulate` → visualizador atualizado → dashboard populado.
 - [x] Validar consistência de unidades SI em toda a comunicação frontend-backend.
-- [ ] Testes end-to-end do fluxo principal (entrada → simulação → resultados).
+- [x] Testes end-to-end do fluxo principal (entrada → simulação → resultados).
 
 ## Fase 10 — Polimento e Entrega
 - [ ] Revisar UX dos formulários (agrupamento por subsistema, mensagens de validação claras).

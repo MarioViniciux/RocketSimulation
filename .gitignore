@@ -38,3 +38,9 @@ pnpm-debug.log*
 *.log
 .cache/
 coverage/
+
+# --- Playwright (testes e2e do frontend) ---
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
