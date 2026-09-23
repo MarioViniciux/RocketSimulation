@@ -20,7 +20,7 @@ export function RocketCanvas() {
   const cameraDistance = Math.max(totalLength * 1.6, 1.0);
 
   return (
-    <Canvas className="h-full w-full">
+    <Canvas style={{ position: "absolute", inset: 0, width: "auto", height: "auto" }}>
       <PerspectiveCamera
         makeDefault
         position={[cameraDistance, centerY, cameraDistance]}
@@ -31,7 +31,12 @@ export function RocketCanvas() {
       <ambientLight intensity={0.6} />
       <directionalLight position={[cameraDistance, totalLength * 1.5, cameraDistance]} intensity={1.2} />
       <RocketModel config={config} />
-      <OrbitControls target={[0, centerY, 0]} enableDamping />
+      <OrbitControls
+        target={[0, centerY, 0]}
+        enableDamping
+        minDistance={cameraDistance * 0.1}
+        maxDistance={cameraDistance * 4}
+      />
     </Canvas>
   );
 }

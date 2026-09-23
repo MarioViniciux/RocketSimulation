@@ -48,37 +48,38 @@ export function buildBodyProfile(config: RocketConfig): AxialPoint[] {
   return points;
 }
 
-/** Caminho SVG fechado da silhueta do corpo (mirror do perfil nos dois
- * lados do eixo). Eixo Y do SVG invertido (`y = -s`) para que a ponta da
- * coifa fique no topo do desenho. */
+/** Caminho SVG fechado da silhueta do corpo (mirror do perfil acima e
+ * abaixo do eixo). Desenhado ao longo do eixo X (`x = s`): a cauda fica
+ * em `x=0` e a ponta da coifa em `x=total_length_m`, à direita — mais
+ * natural para o formato tipicamente largo do painel do que desenhar ao
+ * longo do eixo Y. */
 export function buildBodyPath(config: RocketConfig): string {
   const profile = buildBodyProfile(config);
-  const rightSide = profile.map((p) => ({ x: p.radius, y: -p.s }));
-  const leftSide = [...profile]
+  const topSide = profile.map((p) => ({ x: p.s, y: -p.radius }));
+  const bottomSide = [...profile]
     .reverse()
     .slice(1)
-    .map((p) => ({ x: -p.radius, y: -p.s }));
-  const outline = [...rightSide, ...leftSide];
+    .map((p) => ({ x: p.s, y: p.radius }));
+  const outline = [...topSide, ...bottomSide];
   const [first, ...rest] = outline;
   const segments = rest.map((p) => `L ${p.x} ${p.y}`).join(" ");
   return `M ${first.x} ${first.y} ${segments} Z`;
 }
 
 /** Caminho SVG fechado do contorno trapezoidal de uma aleta, espelhado
- * (`mirror = 1` à direita do corpo, `mirror = -1` à esquerda) — uma
- * representação esquemática simplificada (não uma projeção 3D exata),
- * suficiente para indicar quantidade/posição/forma das aletas na vista
- * lateral. */
+ * (`mirror = 1` abaixo do eixo, `mirror = -1` acima) — uma representação
+ * esquemática simplificada (não uma projeção 3D exata), suficiente para
+ * indicar quantidade/posição/forma das aletas na vista lateral. */
 export function buildFinPath(config: RocketConfig, mirror: 1 | -1): string {
   const { structure } = config;
   const bodyRadius = structure.body_diameter_m / 2;
-  const finRootLeadingEdgeS =
+  const finRootLeadingEdgeX =
     structure.total_length_m - structure.fins.root_leading_edge_position_m;
 
   const toPoint = (point: { x: number; y: number }) => {
-    const s = finRootLeadingEdgeS - point.x;
+    const axial = finRootLeadingEdgeX - point.x;
     const radial = bodyRadius + point.y;
-    return { x: mirror * radial, y: -s };
+    return { x: axial, y: mirror * radial };
   };
 
   const [rootLeadingEdge, rootTrailingEdge, tipTrailingEdge, tipLeadingEdge] = finOutlinePoints(
@@ -101,7 +102,14 @@ interface RocketSilhouette2DProps {
  * como fallback leve e fluido do visualizador 3D: puro SVG declarativo,
  * sem WebGL e compatível com renderização no servidor. Reaproveita a
  * mesma matemática de geometria pura de `RocketModel` (visualizador 3D)
- * via `@/lib/rocket-geometry`. */
+ * via `@/lib/rocket-geometry`.
+ *
+ * Posicionado com `absolute inset-0` (em vez de `height:100%`) porque o
+ * container é dimensionado via flex-grow, não por uma altura explícita:
+ * um `<svg>` filho com `height:100%` não resolve de forma confiável
+ * nesse caso em todos os navegadores e, sem uma altura resolvida, cai
+ * para a proporção do `viewBox` aplicada à largura (um SVG bem mais alto
+ * que o container). */
 export function RocketSilhouette2D({ config }: RocketSilhouette2DProps) {
   const { structure } = config;
   const bodyRadius = structure.body_diameter_m / 2;
@@ -109,29 +117,30 @@ export function RocketSilhouette2D({ config }: RocketSilhouette2DProps) {
   const totalLength = structure.total_length_m;
 
   const bodyPath = useMemo(() => buildBodyPath(config), [config]);
-  const finPathRight = useMemo(() => buildFinPath(config, 1), [config]);
-  const finPathLeft = useMemo(() => buildFinPath(config, -1), [config]);
+  const finPathBottom = useMemo(() => buildFinPath(config, 1), [config]);
+  const finPathTop = useMemo(() => buildFinPath(config, -1), [config]);
 
-  const marginX = halfWidth * MARGIN_FRACTION + 0.01;
-  const marginY = totalLength * 0.02;
+  const marginX = totalLength * 0.02;
+  const marginY = halfWidth * MARGIN_FRACTION + 0.01;
   const strokeWidth = totalLength * 0.002;
 
   const viewBox = [
-    -(halfWidth + marginX),
-    -(totalLength + marginY),
-    2 * (halfWidth + marginX),
-    totalLength + 2 * marginY,
+    -marginX,
+    -(halfWidth + marginY),
+    totalLength + 2 * marginX,
+    2 * (halfWidth + marginY),
   ].join(" ");
 
   return (
     <svg
       viewBox={viewBox}
-      className="h-full w-full"
+      preserveAspectRatio="xMidYMid meet"
+      className="absolute inset-0 h-full w-full"
       role="img"
       aria-label="Silhueta 2D do foguete (vista lateral)"
     >
-      <path d={finPathLeft} fill={FIN_FILL} stroke={FIN_STROKE} strokeWidth={strokeWidth} />
-      <path d={finPathRight} fill={FIN_FILL} stroke={FIN_STROKE} strokeWidth={strokeWidth} />
+      <path d={finPathTop} fill={FIN_FILL} stroke={FIN_STROKE} strokeWidth={strokeWidth} />
+      <path d={finPathBottom} fill={FIN_FILL} stroke={FIN_STROKE} strokeWidth={strokeWidth} />
       <path d={bodyPath} fill={BODY_FILL} stroke={BODY_STROKE} strokeWidth={strokeWidth} />
     </svg>
   );

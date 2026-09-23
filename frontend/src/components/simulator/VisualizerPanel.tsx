@@ -76,7 +76,7 @@ export function VisualizerPanel() {
         </div>
       </div>
 
-      <div className="min-h-[400px] flex-1 rounded border border-black/10 dark:border-white/10">
+      <div className="relative min-h-[400px] flex-1 rounded border border-black/10 dark:border-white/10">
         {effectiveViewMode === "3d" ? (
           <RocketCanvasErrorBoundary
             fallback={<RocketSilhouette2D config={config} />}
