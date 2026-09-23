@@ -1,8 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ROCKET_CONFIG_DEFAULT_VALUES } from "@/lib/rocket-config-defaults";
+import { rocketConfigSchema } from "@/lib/validation";
 import type { RocketConfig } from "@/types";
 import { InputPanel } from "./InputPanel";
 import { ResultsPanel } from "./ResultsPanel";
@@ -25,6 +27,8 @@ export function SimulatorWorkspace() {
   const [activeTab, setActiveTab] = useState<TabId>("input");
   const formMethods = useForm<RocketConfig>({
     defaultValues: ROCKET_CONFIG_DEFAULT_VALUES,
+    resolver: zodResolver(rocketConfigSchema),
+    mode: "onBlur",
   });
 
   return (

@@ -1,30 +1,38 @@
-import type { FieldPath, FieldValues, UseFormRegister } from "react-hook-form";
+"use client";
+
+import { useFormContext } from "react-hook-form";
+import type { FieldPath } from "react-hook-form";
+import { getFieldErrorMessage } from "@/lib/get-field-error-message";
+import type { RocketConfig } from "@/types";
 
 interface SelectFieldOption {
   value: string;
   label: string;
 }
 
-interface SelectFieldProps<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  name: FieldPath<TFieldValues>;
+interface SelectFieldProps {
+  name: FieldPath<RocketConfig>;
   label: string;
   options: readonly SelectFieldOption[];
 }
 
 /** Campo de seleção rotulado, para campos com um conjunto fixo de opções
- * (ex.: `NoseConeShape`). */
-export function SelectField<TFieldValues extends FieldValues>({
-  register,
-  name,
-  label,
-  options,
-}: SelectFieldProps<TFieldValues>) {
+ * (ex.: `NoseConeShape`), com a mensagem de erro de validação, se houver. */
+export function SelectField({ name, label, options }: SelectFieldProps) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<RocketConfig>();
+  const error = getFieldErrorMessage(errors, name);
+
   return (
     <label className="flex flex-col gap-1 text-sm">
       <span className="font-medium">{label}</span>
       <select
-        className="rounded border border-black/15 bg-transparent px-2 py-1 dark:border-white/15"
+        aria-invalid={error ? true : undefined}
+        className={`rounded border bg-transparent px-2 py-1 ${
+          error ? "border-red-500" : "border-black/15 dark:border-white/15"
+        }`}
         {...register(name)}
       >
         {options.map((option) => (
@@ -33,6 +41,7 @@ export function SelectField<TFieldValues extends FieldValues>({
           </option>
         ))}
       </select>
+      {error ? <span className="text-xs text-red-600">{error}</span> : null}
     </label>
   );
 }

@@ -15,7 +15,7 @@ import { NumberField } from "./fields/NumberField";
  * desmarcar, são zerados para `null` (o backend exige que fiquem `null`
  * quando `has_drogue=false`). */
 export function RecoveryForm() {
-  const { register, control, setValue } = useFormContext<RocketConfig>();
+  const { control, setValue } = useFormContext<RocketConfig>();
   const hasDrogue = useWatch({ control, name: "recovery.has_drogue" });
 
   useEffect(() => {
@@ -32,11 +32,7 @@ export function RecoveryForm() {
         <legend className="text-sm font-semibold tracking-wide text-zinc-500 uppercase">
           Paraquedas
         </legend>
-        <CheckboxField
-          register={register}
-          name="recovery.has_drogue"
-          label="Possui paraquedas drogue (piloto)"
-        />
+        <CheckboxField name="recovery.has_drogue" label="Possui paraquedas drogue (piloto)" />
       </fieldset>
 
       {hasDrogue ? (
@@ -46,23 +42,16 @@ export function RecoveryForm() {
           </legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <NumberField
-              register={register}
               name="recovery.drogue_deployment_time_s"
               label="Tempo de ativação após o apogeu"
               unit="s"
             />
             <NumberField
-              register={register}
               name="recovery.drogue_drag_coefficient"
               label="Coeficiente de arrasto (Cd)"
               unit="adimensional"
             />
-            <NumberField
-              register={register}
-              name="recovery.drogue_diameter_m"
-              label="Diâmetro"
-              unit="m"
-            />
+            <NumberField name="recovery.drogue_diameter_m" label="Diâmetro" unit="m" />
           </div>
         </fieldset>
       ) : null}
@@ -73,23 +62,16 @@ export function RecoveryForm() {
         </legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <NumberField
-            register={register}
             name="recovery.main_deployment_time_s"
             label="Tempo de ativação após o apogeu"
             unit="s"
           />
           <NumberField
-            register={register}
             name="recovery.main_drag_coefficient"
             label="Coeficiente de arrasto (Cd)"
             unit="adimensional"
           />
-          <NumberField
-            register={register}
-            name="recovery.main_diameter_m"
-            label="Diâmetro"
-            unit="m"
-          />
+          <NumberField name="recovery.main_diameter_m" label="Diâmetro" unit="m" />
         </div>
       </fieldset>
 
@@ -99,35 +81,26 @@ export function RecoveryForm() {
         </legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <NumberField
-            register={register}
             name="recovery.lower_support_mass_kg"
             label="Massa do suporte inferior"
             unit="kg"
           />
           <NumberField
-            register={register}
             name="recovery.parachutes_mass_kg"
             label="Massa dos paraquedas"
             unit="kg"
           />
           <NumberField
-            register={register}
             name="recovery.piston_cap_mass_kg"
             label="Massa da tampa do pistão"
             unit="kg"
           />
           <NumberField
-            register={register}
             name="recovery.ejection_charge_mass_kg"
             label="Massa de pólvora de ejeção"
             unit="kg"
           />
-          <NumberField
-            register={register}
-            name="recovery.center_of_mass_m"
-            label="Centro de massa"
-            unit="m"
-          />
+          <NumberField name="recovery.center_of_mass_m" label="Centro de massa" unit="m" />
         </div>
       </fieldset>
 
@@ -137,13 +110,11 @@ export function RecoveryForm() {
         </legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <NumberField
-            register={register}
             name="recovery.predicted_terminal_velocity_m_s"
             label="Velocidade terminal prevista"
             unit="m/s"
           />
           <NumberField
-            register={register}
             name="recovery.predicted_search_radius_m"
             label="Raio de busca previsto"
             unit="m"

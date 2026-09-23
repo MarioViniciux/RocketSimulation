@@ -1,21 +1,26 @@
-import type { FieldPath, FieldValues, UseFormRegister } from "react-hook-form";
+"use client";
 
-interface NumberFieldProps<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  name: FieldPath<TFieldValues>;
+import { useFormContext } from "react-hook-form";
+import type { FieldPath } from "react-hook-form";
+import { getFieldErrorMessage } from "@/lib/get-field-error-message";
+import type { RocketConfig } from "@/types";
+
+interface NumberFieldProps {
+  name: FieldPath<RocketConfig>;
   label: string;
   unit: string;
   step?: number | "any";
 }
 
-/** Campo numérico rotulado, com a unidade (SI) exibida ao lado do rótulo. */
-export function NumberField<TFieldValues extends FieldValues>({
-  register,
-  name,
-  label,
-  unit,
-  step = "any",
-}: NumberFieldProps<TFieldValues>) {
+/** Campo numérico rotulado, com a unidade (SI) exibida ao lado do rótulo e
+ * a mensagem de erro de validação (`rocketConfigSchema`), se houver. */
+export function NumberField({ name, label, unit, step = "any" }: NumberFieldProps) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<RocketConfig>();
+  const error = getFieldErrorMessage(errors, name);
+
   return (
     <label className="flex flex-col gap-1 text-sm">
       <span className="font-medium">
@@ -24,9 +29,13 @@ export function NumberField<TFieldValues extends FieldValues>({
       <input
         type="number"
         step={step}
-        className="rounded border border-black/15 bg-transparent px-2 py-1 dark:border-white/15"
+        aria-invalid={error ? true : undefined}
+        className={`rounded border bg-transparent px-2 py-1 ${
+          error ? "border-red-500" : "border-black/15 dark:border-white/15"
+        }`}
         {...register(name, { valueAsNumber: true })}
       />
+      {error ? <span className="text-xs text-red-600">{error}</span> : null}
     </label>
   );
 }
