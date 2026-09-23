@@ -4,8 +4,14 @@ import { PayloadForm } from "@/components/forms/PayloadForm";
 import { PropulsionForm } from "@/components/forms/PropulsionForm";
 import { RecoveryForm } from "@/components/forms/RecoveryForm";
 import { StructureForm } from "@/components/forms/StructureForm";
+import { SimulateButton } from "./SimulateButton";
 
-export function InputPanel() {
+interface InputPanelProps {
+  /** Ver `SimulateButton`. */
+  onSimulated?: () => void;
+}
+
+export function InputPanel({ onSimulated }: InputPanelProps) {
   return (
     <div className="flex flex-1 flex-col gap-6 p-6">
       <div className="flex flex-col gap-2">
@@ -46,6 +52,8 @@ export function InputPanel() {
         <h3 className="text-base font-semibold">Ambiente/Localização</h3>
         <EnvironmentForm />
       </section>
+
+      <SimulateButton onSimulated={onSimulated} />
     </div>
   );
 }

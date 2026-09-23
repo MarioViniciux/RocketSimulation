@@ -15,8 +15,8 @@ interface SimulationContextValue {
   state: SimulationState;
   /** Chama `POST /simulate` com o `config` informado, atualizando `state`
    * pelos estados de carregamento/erro/sucesso. Quem dispara essa chamada
-   * a partir do preenchimento dos formulários é a Fase 9 - este provider
-   * só cuida do estado da chamada em si. */
+   * a partir do preenchimento dos formulários é o `SimulateButton` - este
+   * provider só cuida do estado da chamada em si. */
   runSimulation: (config: RocketConfig) => Promise<void>;
   reset: () => void;
 }

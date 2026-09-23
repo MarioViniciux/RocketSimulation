@@ -62,7 +62,7 @@ export function SimulatorWorkspace() {
               hidden={activeTab !== "input"}
               className="flex flex-1 flex-col"
             >
-              <InputPanel />
+              <InputPanel onSimulated={() => setActiveTab("results")} />
             </section>
             <section
               role="tabpanel"

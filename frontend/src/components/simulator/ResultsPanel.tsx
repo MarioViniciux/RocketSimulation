@@ -24,9 +24,9 @@ export function ResultsPanel() {
       {state.status === "error" ? <ErrorState message={state.message} /> : null}
       {state.status === "idle" ? (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Ainda não há uma simulação executada. A chamada a{" "}
-          <code className="font-mono">POST /simulate</code> a partir dos formulários será
-          conectada na Fase 9.
+          Ainda não há uma simulação executada. Preencha os formulários na aba{" "}
+          <span className="font-medium">Entrada de Dados</span> e clique em{" "}
+          <span className="font-medium">Executar Simulação</span>.
         </p>
       ) : null}
       {state.status === "success" ? (
